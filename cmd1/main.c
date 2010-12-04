@@ -1,6 +1,8 @@
 #include <stdio.h>
 
-#include "liba.h"
+#include "libA.h"
+#include "libB.h"
+#include "libC.h"
 
 int
 main(int argc, char *argv[])

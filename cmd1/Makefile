@@ -6,7 +6,7 @@ else
 
 ALL_PROGRAMS		+= $(mfd)cmd1
 $(mfd)cmd1_OBJS		:= $(mfd)main.$o
-$(mfd)cmd1_LIBS		:= libA libB libC
+$(mfd)cmd1_LIBS		:= A B C
 
 # Includes must be at the bottom.
 include $(mfd)libC/Makefile

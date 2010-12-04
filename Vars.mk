@@ -13,7 +13,11 @@ TERMINAL_TARGETS	:=
 ALL_ARCHIVES		:=
 ALL_PROGRAMS		:=
 
-LIBPATHS		:=
+INCDIR			:= $(BASE)include
+LIBDIR			:= $(BASE)lib
+
+CFLAGS			+= -I$(INCDIR)
+LDFLAGS			+= -L$(LIBDIR)
 
 CC			:= gcc
 
