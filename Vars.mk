@@ -17,7 +17,7 @@ INCDIR			:= $(BASE)include
 LIBDIR			:= $(BASE)lib
 
 CFLAGS			+= -I$(INCDIR)
-LDFLAGS			+= -L$(LIBDIR)
+LDFLAGS			+=
 
 CC			:= gcc
 

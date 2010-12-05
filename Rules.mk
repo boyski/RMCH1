@@ -24,9 +24,9 @@ endef
 
 # Generates rules for binary executable programs.
 define PROGRAM_RULE =
-$(1): $$($(1)_OBJS) $$($(1)_LIBS:%=-l%)
+$(1): $$($(1)_OBJS) $(addprefix $(LIBDIR)/,$$($(1)_LIBS))
 	cd $$(@D) &&\
-	$(CC) -o $$(@F) $(LDFLAGS) $$(notdir $$^)
+	$(CC) -o $$(@F) $(LDFLAGS) $$^
 INTERMEDIATE_TARGETS	+= $$($(1)_OBJS)
 TERMINAL_TARGETS	+= $(1)
 endef
