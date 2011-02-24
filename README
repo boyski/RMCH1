@@ -1,0 +1,18 @@
+This sample build structure demonstrates one method of doing a flat
+(non-recursive) build using GNU make. One of the main design goals
+is that each involved directory must contain a file called
+"Makefile", such that it "feels" like a traditional recursive
+structure.  The idea is that a user should be able to simply type
+"make" in any directory and get a good build. In fact all of these
+Makefiles include each other to form a single logical Makefile
+which has the same behavior regardless of which was the point of
+entry.
+
+Another feature, not particularly unique, is that all actual build
+logic is contained in global files (*.mk) which do not clutter the
+developer's view of the world. The leaf makefiles (the ones actually
+called "Makefile") are boilerplate and tend to contain only lists of
+desired targets.
+
+Usage is typical: "make" to build everything, "make clean" to remove
+build targets, "make help" to see this message.
