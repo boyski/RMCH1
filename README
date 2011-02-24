@@ -10,9 +10,14 @@ entry.
 
 Another feature, not particularly unique, is that all actual build
 logic is contained in global files (*.mk) which do not clutter the
-developer's view of the world. The leaf makefiles (the ones actually
-called "Makefile") are boilerplate and tend to contain only lists of
-desired targets.
+developer's view of the world. The leaf makefiles (the ones
+actually called "Makefile") are boilerplate and tend to contain
+only lists of desired targets.
 
-Usage is typical: "make" to build everything, "make clean" to remove
-build targets, "make help" to see this message.
+Usage is typical: "make" to build everything, "make clean" to
+remove build targets, "make help" to see this message.
+
+Note: although this implementation is GPL, it exists primarily to
+illustrate ideas which are not themselves licensed or licensable.
+It should be trivial to transfer the ideas without GPL
+contamination, and that is explicitly the goal.
