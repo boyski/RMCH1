@@ -15,6 +15,11 @@
 
 # Determine the root of the build tree.
 export BASE := $(dir $(abspath $(lastword ${MAKEFILE_LIST})))
+$(info BASE=$(BASE))
+
+ifneq (,$(filter 3.7% 3.80% 3.81%, $(MAKE_VERSION)))
+$(error Error: this makefile requires GNU make 3.82 or above)
+endif
 
 # Reserve 'all' as the default target.
 .PHONY: all

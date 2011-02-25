@@ -25,7 +25,12 @@ all: $(TERMINAL_TARGETS)
 
 # Conventional targets.
 
+.PHONY: clean
 clean:
 	rm -f $(TERMINAL_TARGETS) $(INTERMEDIATE_TARGETS)
+
+.PHONY: help
+help:
+	@cat $(BASE)/README
 
 endif #FOOTER_
