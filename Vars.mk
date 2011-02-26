@@ -23,7 +23,7 @@ VARS_ := 1
 # it's a good idea to initialize it with := here.
 
 IntermediateTargets	:=
-TerminalTargets		:=
+FinalTargets		:=
 
 AllArchives		:=
 AllPrograms		:=

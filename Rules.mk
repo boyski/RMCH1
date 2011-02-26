@@ -21,18 +21,18 @@ RULES_ := 1
 vpath %.$a $(LibDir)
 
 %.o: %.c
-	$(COMPILE.c) $(OUTPUT_OPTION) $<
+	$(strip cd $(@D) && $(COMPILE.c) -o $(@F) $(<F))
 
 ###############################################################
 # Generates rules for static libraries, aka archive libraries.
 ###############################################################
 define _ArchiveRule =
 $(LibDir)/$(notdir $(1)).$a: $$($(1)_objs)
-	cd $$(<D) &&\
+	$$(strip cd $$(<D) &&\
 	$(RM) $$@ &&\
-	$(AR) -cr $$@ $$(^F)
+	$(AR) -cr $$@ $$(^F))
 IntermediateTargets	+= $$($(1)_objs)
-TerminalTargets		+= $(LibDir)/$(notdir $(1)).$a
+FinalTargets		+= $(LibDir)/$(notdir $(1)).$a
 endef
 
 ###############################################################
@@ -40,10 +40,10 @@ endef
 ###############################################################
 define _ProgramRule =
 $(1): $$($(1)_objs) $(addprefix $(LibDir)/,$$($(1)_libs))
-	cd $$(@D) &&\
-	$(CC) -o $$(@F) $(LDFLAGS) $$^
+	$$(strip cd $$(@D) &&\
+	$(CC) -o $$(@F) $(LDFLAGS) $$^)
 IntermediateTargets	+= $$($(1)_objs)
-TerminalTargets		+= $(1)
+FinalTargets		+= $(1)
 endef
 
 endif #RULES_

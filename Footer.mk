@@ -16,19 +16,21 @@ FOOTER_ := 1
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Now that lists of required targets have been established, eval the
+# rule generators with that context.
+
 $(foreach _tgt,$(AllArchives),$(eval $(call _ArchiveRule,$(_tgt))))
 
 $(foreach _tgt,$(AllPrograms),$(eval $(call _ProgramRule,$(_tgt))))
 
-# Establish the key dependencies.
-all: $(TerminalTargets)
+# Establish key dependencies.
+all: $(FinalTargets)
 
 # Conventional targets.
 
 .PHONY: clean
 clean:
-	cd $(Base) &&\
-	    rm -f $(patsubst $(Base)%,%,$(TerminalTargets) $(IntermediateTargets))
+	cd $(Base) && rm -f $(patsubst $(Base)%,%,$(FinalTargets) $(IntermediateTargets))
 
 .PHONY: help
 help:
