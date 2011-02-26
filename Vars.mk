@@ -19,8 +19,8 @@ VARS_ := 1
 # Initialize general purpose make variables. This is where the
 # decision about simply- vs recursively-expanded is made, because
 # the += operator respects the previous state but defaults to
-# recursive. Therefore, if a variable should be simply-expanded
-# it's a good idea to initialize it so here.
+# recursive. Therefore, if a variable can be simply-expanded
+# it's a good idea to initialize it with := here.
 
 IntermediateTargets	:=
 TerminalTargets		:=
@@ -30,6 +30,8 @@ AllPrograms		:=
 
 IncDir			:= $(Base)include
 LibDir			:= $(Base)lib
+
+$(shell [ -d $(LibDir) ] || set -x; mkdir -p $(LibDir))
 
 CFLAGS			+= -I$(IncDir)
 LDFLAGS			+=

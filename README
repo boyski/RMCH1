@@ -20,4 +20,4 @@ remove build targets, "make help" to see this message.
 Note: although this implementation is GPL, it exists primarily to
 illustrate ideas which are not themselves licensed or licensable.
 It should be trivial to transfer the ideas without GPL
-contamination, and that is explicitly the intent.
+contamination, which is explicitly the intended use.
