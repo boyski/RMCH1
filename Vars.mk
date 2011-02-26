@@ -22,6 +22,7 @@ VARS_ := 1
 # recursive. Therefore, if a variable can be simply-expanded
 # it's a good idea to initialize it with := here.
 
+PrereqFiles		:=
 IntermediateTargets	:=
 FinalTargets		:=
 

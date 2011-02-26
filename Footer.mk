@@ -26,11 +26,14 @@ $(foreach _tgt,$(AllPrograms),$(eval $(call _ProgramRule,$(_tgt))))
 # Establish key dependencies.
 all: $(FinalTargets)
 
+# Pick up all generated dependency information.
+-include $(PrereqFiles)
+
 # Conventional targets.
 
 .PHONY: clean
 clean:
-	cd $(Base) && rm -f $(patsubst $(Base)%,%,$(FinalTargets) $(IntermediateTargets))
+	cd $(Base) && rm -f $(patsubst $(Base)%,%,$(FinalTargets) $(IntermediateTargets) $(PrereqFiles))
 
 .PHONY: help
 help:

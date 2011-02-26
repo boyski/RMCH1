@@ -21,7 +21,7 @@ RULES_ := 1
 vpath %.$a $(LibDir)
 
 %.o: %.c
-	$(strip cd $(@D) && $(COMPILE.c) -o $(@F) $(<F))
+	$(strip cd $(@D) && $(COMPILE.c) -o $(@F) -MD $(<F))
 
 ###############################################################
 # Generates rules for static libraries, aka archive libraries.
@@ -31,6 +31,7 @@ $(LibDir)/$(notdir $(1)).$a: $$($(1)_objs)
 	$$(strip cd $$(<D) &&\
 	$(RM) $$@ &&\
 	$(AR) -cr $$@ $$(^F))
+PrereqFiles		+= $$(patsubst %.o,%.d,$$($(1)_objs))
 IntermediateTargets	+= $$($(1)_objs)
 FinalTargets		+= $(LibDir)/$(notdir $(1)).$a
 endef
