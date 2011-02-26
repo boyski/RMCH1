@@ -58,6 +58,7 @@ include $(Base)Rules.mk
 include $(Base)libA/Makefile
 include $(Base)libB/Makefile
 include $(Base)cmd1/Makefile
+include $(Base)cmd2/Makefile
 
 # Late infrastructure.
 include $(Base)Footer.mk
