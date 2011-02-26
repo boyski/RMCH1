@@ -31,6 +31,9 @@ AllPrograms		:=
 IncDir			:= $(Base)include
 LibDir			:= $(Base)lib
 
+# It's critical that directories never be *created* in recipes
+# because that leads to a race condition under -j. This method
+# is guaranteed to be single-threaded.
 $(shell [ -d $(LibDir) ] || set -x; mkdir -p $(LibDir))
 
 CFLAGS			+= -I$(IncDir)
