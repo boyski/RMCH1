@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-mfd := $(dir $(abspath $(lastword ${MAKEFILE_LIST})))
+mfd := $(dir $(realpath $(lastword ${MAKEFILE_LIST})))
 ifndef Base
 include $(realpath $(mfd)../..)/Makefile
 else
