@@ -40,7 +40,7 @@
 
 # Determine the root of the build tree.
 export Base := $(dir $(abspath $(lastword ${MAKEFILE_LIST})))
-$(info Base=$(Base))
+#$(info Base=$(Base))
 
 ifneq (,$(filter 3.7% 3.80% 3.81%, $(MAKE_VERSION)))
 $(error Error: this makefile requires GNU make 3.82 or above)
