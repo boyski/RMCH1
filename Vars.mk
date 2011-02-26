@@ -37,8 +37,8 @@ LibDir			:= $(Base)lib
 # is guaranteed to be single-threaded.
 $(shell [ -d $(LibDir) ] || set -x; mkdir -p $(LibDir))
 
-CFLAGS			+= -I$(IncDir)
-LDFLAGS			+=
+CFLAGS			:= -I$(IncDir)
+LDFLAGS			:=
 
 CC			:= gcc
 

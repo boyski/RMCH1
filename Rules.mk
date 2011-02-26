@@ -21,7 +21,7 @@ RULES_ := 1
 vpath %.$a $(LibDir)
 
 %.o: %.c
-	$(strip cd $(@D) && $(COMPILE.c) -o $(@F) -MD $(<F))
+	$(strip $(CC) -c -o $@ -MMD -I$(IncDir) $<)
 
 ###############################################################
 # Generates rules for static libraries, aka archive libraries.
@@ -43,6 +43,7 @@ define _ProgramRule =
 $(1): $$($(1)_objs) $(addprefix $(LibDir)/,$$($(1)_libs))
 	$$(strip cd $$(@D) &&\
 	$(CC) -o $$(@F) $(LDFLAGS) $$^)
+PrereqFiles		+= $$(patsubst %.o,%.d,$$($(1)_objs))
 IntermediateTargets	+= $$($(1)_objs)
 FinalTargets		+= $(1)
 endef

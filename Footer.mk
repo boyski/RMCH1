@@ -27,7 +27,7 @@ $(foreach _tgt,$(AllPrograms),$(eval $(call _ProgramRule,$(_tgt))))
 all: $(FinalTargets)
 
 # Pick up all generated dependency information.
--include $(PrereqFiles)
+-include $(sort $(PrereqFiles))
 
 # Conventional targets.
 
