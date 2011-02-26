@@ -14,14 +14,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 mfd := $(dir $(abspath $(lastword ${MAKEFILE_LIST})))
-ifndef BASE
+ifndef Base
 include $(realpath $(mfd)..)/Makefile
 else
 ###################### IGNORE ABOVE ###############################
 
-ALL_PROGRAMS		+= $(mfd)cmd1
-$(mfd)cmd1_OBJS		:= $(mfd)main.$o
-$(mfd)cmd1_LIBS		:= libA.$a libB.$a libC.$a
+AllPrograms		+= $(mfd)cmd1
+$(mfd)cmd1_objs		:= $(mfd)main.$o
+$(mfd)cmd1_libs		:= libA.$a libB.$a libC.$a
 
 # Includes must be at the bottom.
 include $(mfd)libC/Makefile

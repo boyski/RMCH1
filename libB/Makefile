@@ -14,13 +14,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 mfd := $(dir $(abspath $(lastword ${MAKEFILE_LIST})))
-ifndef BASE
+ifndef Base
 include $(realpath $(mfd)..)/Makefile
 else
 ###################### IGNORE ABOVE ###############################
 
-ALL_ARCHIVES		+= $(mfd)libB
-$(mfd)libB_OBJS		:= $(mfd)b1.$o $(mfd)b2.$o
+AllArchives		+= $(mfd)libB
+$(mfd)libB_objs		:= $(mfd)b1.$o $(mfd)b2.$o
 
 ###################### IGNORE BELOW ###############################
 endif

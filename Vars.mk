@@ -22,16 +22,16 @@ VARS_ := 1
 # recursive. Therefore, if a variable should be simply-expanded
 # it's a good idea to initialize it so here.
 
-INTERMEDIATE_TARGETS	:=
-TERMINAL_TARGETS	:=
+IntermediateTargets	:=
+TerminalTargets		:=
 
-ALL_ARCHIVES		:=
-ALL_PROGRAMS		:=
+AllArchives		:=
+AllPrograms		:=
 
-INCDIR			:= $(BASE)include
-LIBDIR			:= $(BASE)lib
+IncDir			:= $(Base)include
+LibDir			:= $(Base)lib
 
-CFLAGS			+= -I$(INCDIR)
+CFLAGS			+= -I$(IncDir)
 LDFLAGS			+=
 
 CC			:= gcc

@@ -16,21 +16,22 @@ FOOTER_ := 1
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-$(foreach _tgt,$(ALL_ARCHIVES),$(eval $(call ARCHIVE_RULE,$(_tgt))))
+$(foreach _tgt,$(AllArchives),$(eval $(call _ArchiveRule,$(_tgt))))
 
-$(foreach _tgt,$(ALL_PROGRAMS),$(eval $(call PROGRAM_RULE,$(_tgt))))
+$(foreach _tgt,$(AllPrograms),$(eval $(call _ProgramRule,$(_tgt))))
 
 # Establish the key dependencies.
-all: $(TERMINAL_TARGETS)
+all: $(TerminalTargets)
 
 # Conventional targets.
 
 .PHONY: clean
 clean:
-	rm -f $(TERMINAL_TARGETS) $(INTERMEDIATE_TARGETS)
+	cd $(Base) &&\
+	    rm -f $(patsubst $(Base)%,%,$(TerminalTargets) $(IntermediateTargets))
 
 .PHONY: help
 help:
-	@cat $(BASE)/README
+	@cat $(Base)README
 
 endif #FOOTER_

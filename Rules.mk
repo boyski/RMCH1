@@ -18,32 +18,32 @@ RULES_ := 1
 
 .SUFFIXES:
 
-vpath %.$a $(LIBDIR)
+vpath %.$a $(LibDir)
 
 %.o: %.c
 	$(COMPILE.c) $(OUTPUT_OPTION) $<
 
+###############################################################
 # Generates rules for static libraries, aka archive libraries.
-define ARCHIVE_RULE =
-$(1).$a: $$($(1)_OBJS)
-	cd $$(@D) &&\
-	$(RM) $$(@F) &&\
-	$(AR) -cr $$(@F) $$(notdir $$^)
-$(LIBDIR)/$(notdir $(1)).$a: $(1).$a
+###############################################################
+define _ArchiveRule =
+$(LibDir)/$(notdir $(1)).$a: $$($(1)_objs)
+	cd $$(<D) &&\
 	$(RM) $$@ &&\
-	mkdir -p $$(@D) &&\
-	cp -p $$^ $$(@D)
-INTERMEDIATE_TARGETS	+= $$($(1)_OBJS) $$@
-TERMINAL_TARGETS	+= $(LIBDIR)/$(notdir $(1)).$a
+	$(AR) -cr $$@ $$(^F)
+IntermediateTargets	+= $$($(1)_objs)
+TerminalTargets		+= $(LibDir)/$(notdir $(1)).$a
 endef
 
+###############################################################
 # Generates rules for binary executable programs.
-define PROGRAM_RULE =
-$(1): $$($(1)_OBJS) $(addprefix $(LIBDIR)/,$$($(1)_LIBS))
+###############################################################
+define _ProgramRule =
+$(1): $$($(1)_objs) $(addprefix $(LibDir)/,$$($(1)_libs))
 	cd $$(@D) &&\
 	$(CC) -o $$(@F) $(LDFLAGS) $$^
-INTERMEDIATE_TARGETS	+= $$($(1)_OBJS)
-TERMINAL_TARGETS	+= $(1)
+IntermediateTargets	+= $$($(1)_objs)
+TerminalTargets		+= $(1)
 endef
 
 endif #RULES_
