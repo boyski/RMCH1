@@ -25,8 +25,11 @@ vpath %.$a $(LibDir)
 
 ###############################################################
 # Generates rules for static libraries, aka archive libraries.
+# Also generates a phony rule using the basename of the target.
 ###############################################################
 define _ArchiveRule =
+.PHONY: $(notdir $(1))
+$(notdir $(1)): $(LibDir)/$(notdir $(1)).$a
 $(LibDir)/$(notdir $(1)).$a: $$($(1)_objs)
 	$$(strip cd $$(<D) &&\
 	$(RM) $$@ &&\
@@ -38,8 +41,11 @@ endef
 
 ###############################################################
 # Generates rules for binary executable programs.
+# Also generates a phony rule using the basename of the target.
 ###############################################################
 define _ProgramRule =
+.PHONY: $(notdir $(1))
+$(notdir $(1)): $(1)
 $(1): $$($(1)_objs) $(addprefix $(LibDir)/,$$($(1)_libs))
 	$$(strip cd $$(@D) &&\
 	$(CC) -o $$(@F) $(LDFLAGS) $$^)
