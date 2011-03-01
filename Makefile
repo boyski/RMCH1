@@ -39,7 +39,7 @@
 ## can result in subtle errors.
 
 # Determine the root of the build tree.
-export Base := $(dir $(realpath $(lastword ${MAKEFILE_LIST})))
+Base := $(dir $(realpath $(lastword ${MAKEFILE_LIST})))
 #$(info Base=$(Base))
 
 ifneq (,$(filter 3.7% 3.80% 3.81%, $(MAKE_VERSION)))

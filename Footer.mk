@@ -24,7 +24,7 @@ $(foreach _tgt,$(AllArchives),$(eval $(call _ArchiveRule,$(_tgt))))
 $(foreach _tgt,$(AllPrograms),$(eval $(call _ProgramRule,$(_tgt))))
 
 # Establish key dependencies.
-all: $(FinalTargets)
+all: $(filter $(TgtFilter)%, $(FinalTargets))
 
 # Pick up all generated dependency information.
 -include $(sort $(PrereqFiles))
@@ -33,10 +33,16 @@ all: $(FinalTargets)
 
 .PHONY: clean
 clean:
-	cd $(Base) && rm -f $(patsubst $(Base)%,%,$(FinalTargets) $(IntermediateTargets) $(PrereqFiles))
+	cd $(Base) && rm -f $(patsubst $(Base)%,%,$(wildcard $(FinalTargets) $(IntermediateTargets) $(PrereqFiles)))
 
 .PHONY: help
 help:
 	@cat $(Base)README
+
+# Causes only targets defined within the current subtree (and their prerequisites)
+# to be considered.
+.PHONY: subtree
+subtree:
+	$(MAKE) --no-print-directory -f $(firstword $(MAKEFILE_LIST)) TgtFilter=$(CURDIR)/
 
 endif #FOOTER_
