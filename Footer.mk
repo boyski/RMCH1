@@ -29,18 +29,21 @@ all: $(filter $(TgtFilter)%, $(FinalTargets))
 # Pick up all generated dependency information.
 -include $(sort $(PrereqFiles))
 
-# Conventional targets.
-
+# Conventional "clean" target - removes all known, existing target files.
+_inplace := $(patsubst $(Base)%,%,$(wildcard $(FinalTargets) $(IntermediateTargets) $(PrereqFiles)))
 .PHONY: clean
-clean:
-	cd $(Base) && rm -f $(patsubst $(Base)%,%,$(wildcard $(FinalTargets) $(IntermediateTargets) $(PrereqFiles)))
+ifneq (,$(_inplace))
+clean: ; cd $(Base) && rm -f $(_inplace)
+else
+clean: ; @echo "All clean!"
+endif
 
 .PHONY: help
 help:
 	@cat $(Base)README
 
 # Causes only targets defined within the current subtree (and their prerequisites)
-# to be considered.
+# to be considered for build purposes.
 .PHONY: subtree
 subtree:
 	$(MAKE) --no-print-directory -f $(firstword $(MAKEFILE_LIST)) TgtFilter=$(CURDIR)/
