@@ -21,7 +21,7 @@ RULES_ := 1
 vpath %.$a $(LibDir)
 
 %.o: %.c
-	$(strip $(CC) -c -o $@ -MMD -I$(IncDir) $<)
+	$(strip $(subst $(Base),$${BASE}, $(CC) -c -o $@ -MD -I$(IncDir) $<))
 
 ###############################################################
 # Generates rules for static libraries, aka archive libraries.
@@ -31,9 +31,9 @@ define _ArchiveRule =
 .PHONY: $(notdir $(1))
 $(notdir $(1)): $(LibDir)/$(notdir $(1)).$a
 $(LibDir)/$(notdir $(1)).$a: $$($(1)_objs)
-	$$(strip cd $$(<D) &&\
+	$$(strip $$(subst $$(Base),$$$${BASE},cd $$(<D) &&\
 	$(RM) $$@ &&\
-	$(AR) -cr $$@ $$(^F))
+	$(AR) -cr $$@ $$(^F)))
 PrereqFiles		+= $$(patsubst %.o,%.d,$$($(1)_objs))
 IntermediateTargets	+= $$($(1)_objs)
 FinalTargets		+= $(LibDir)/$(notdir $(1)).$a
@@ -51,8 +51,9 @@ $(1): $$($(1)_objs)
 else
 $(1): $$($(1)_objs) $(addprefix $(LibDir)/,$$($(1)_libs))
 endif
-	$$(strip cd $$(@D) &&\
-	$(CC) -o $$(@F) $(LDFLAGS) $$^)
+	$$(strip $$(subst $$(Base),$$$${BASE},\
+	cd $$(@D) &&\
+	$(CC) -o $$(@F) $(LDFLAGS) $$^))
 PrereqFiles		+= $$(patsubst %.o,%.d,$$($(1)_objs))
 IntermediateTargets	+= $$($(1)_objs)
 FinalTargets		+= $(1)
