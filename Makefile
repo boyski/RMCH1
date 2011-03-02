@@ -43,7 +43,12 @@ Base := $(dir $(realpath $(lastword ${MAKEFILE_LIST})))
 #$(info Base=$(Base))
 
 ifneq (,$(filter 3.7% 3.80% 3.81%, $(MAKE_VERSION)))
-$(error Error: this makefile requires GNU make 3.82 or above)
+$(error Error: GNU make 3.82 or above required)
+endif
+
+# Make sure the log file contains the invocation.
+ifeq (,$(filter %clean, $(MAKECMDGOALS)))
+$(info + "$(strip $(MAKE) $(MFLAGS) -f $(firstword $(MAKEFILE_LIST)) $(MAKECMDGOALS))" in $(CURDIR))
 endif
 
 # Reserve 'all' early on as the default target.
@@ -59,6 +64,7 @@ include $(Base)libA/Makefile
 include $(Base)libB/Makefile
 include $(Base)cmd1/Makefile
 include $(Base)cmd2/Makefile
+include $(Base)cmd3/Makefile
 
 # Late infrastructure.
 include $(Base)Footer.mk

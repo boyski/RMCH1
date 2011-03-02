@@ -35,7 +35,7 @@ _inplace := $(patsubst $(Base)%,%,$(wildcard $(FinalTargets) $(IntermediateTarge
 ifneq (,$(_inplace))
 clean: ; cd $(Base) && rm -f $(_inplace)
 else
-clean: ; @echo "All clean!"
+clean: ; @echo "Already clean!"
 endif
 
 .PHONY: help

@@ -46,7 +46,11 @@ endef
 define _ProgramRule =
 .PHONY: $(notdir $(1))
 $(notdir $(1)): $(1)
+ifeq (,$$($(1)_libs))
+$(1): $$($(1)_objs)
+else
 $(1): $$($(1)_objs) $(addprefix $(LibDir)/,$$($(1)_libs))
+endif
 	$$(strip cd $$(@D) &&\
 	$(CC) -o $$(@F) $(LDFLAGS) $$^)
 PrereqFiles		+= $$(patsubst %.o,%.d,$$($(1)_objs))
