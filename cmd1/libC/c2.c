@@ -3,5 +3,5 @@
 int
 c2(void)
 {
-    return 0;
+    return 2;
 }

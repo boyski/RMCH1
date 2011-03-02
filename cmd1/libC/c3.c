@@ -3,5 +3,5 @@
 int
 c3(void)
 {
-    return 0;
+    return 3;
 }

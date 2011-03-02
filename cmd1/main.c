@@ -1,3 +1,4 @@
+#include <libgen.h>
 #include <stdio.h>
 
 #include "libA.h"
@@ -13,7 +14,7 @@ main(int argc, char *argv[])
     i += b1() + b2();
     i += c1() + c2() + c3();
 
-    printf("%s: %d\n", argv[0], i);
+    printf("%s: %d\n", basename(argv[0]), i);
 
     return i;
 }
