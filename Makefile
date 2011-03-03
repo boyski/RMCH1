@@ -38,19 +38,20 @@
 ## (and should!) refer to $(Base)foobar rather than $(Base)/foobar which
 ## can result in subtle errors.
 
-# Determine the root of the build tree.
+# Determine the root of the build tree. There's one variable
+# which is used internally to make, and another with the same
+# value which is exported for use in recipes.
 Base := $(dir $(realpath $(lastword ${MAKEFILE_LIST})))
-#$(info Base=$(Base))
-
 export BASE := $(Base)
 
 ifneq (,$(filter 3.7% 3.80% 3.81%, $(MAKE_VERSION)))
 $(error Error: GNU make 3.82 or above required)
 endif
 
-# Make sure the log file contains the invocation.
+# Make sure the log file contains a record of the invocation.
 ifeq (,$(filter %clean, $(MAKECMDGOALS)))
-$(info + "$(strip $(MAKE) $(MFLAGS) -f $(firstword $(MAKEFILE_LIST)) $(MAKECMDGOALS))" with BASE=$(BASE))
+$(info + "$(strip $(MAKE) $(MFLAGS) -f $(firstword $(MAKEFILE_LIST)) $(MAKECMDGOALS))" in $(CURDIR))
+$(info + export BASE=$(BASE))
 endif
 
 # Reserve 'all' early on as the default target.
