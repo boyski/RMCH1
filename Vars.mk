@@ -31,8 +31,8 @@ FinalTargets		:=
 AllArchives		:=
 AllPrograms		:=
 
-IncDir			:= $(Base)include
-LibDir			:= $(Base)lib
+IncDir			:= $(BaseDir)include
+LibDir			:= $(BaseDir)lib
 
 # It's critical that directories never be *created* in recipes
 # because that leads to a race condition under -j. This method

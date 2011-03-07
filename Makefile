@@ -34,15 +34,15 @@
 ## implicit rules or for parameters that the user should override
 ## with command options."
 ##
-## Directory values like $(Base) contain a trailing slash so you can
-## (and should!) refer to $(Base)foobar rather than $(Base)/foobar which
+## Directory values like $(BaseDir) contain a trailing slash so you can
+## (and should!) refer to $(BaseDir)foobar rather than $(BaseDir)/foobar which
 ## can result in subtle errors.
 
 # Determine the root of the build tree. There's one variable
 # which is used internally to make, and another with the same
 # value which is exported for use in recipes.
-Base := $(dir $(realpath $(lastword ${MAKEFILE_LIST})))
-export BASE := $(Base)
+BaseDir := $(dir $(realpath $(lastword ${MAKEFILE_LIST})))
+export BASE := $(BaseDir)
 
 ifneq (,$(filter 3.7% 3.80% 3.81%, $(MAKE_VERSION)))
 $(error Error: GNU make 3.82 or above required)
@@ -59,15 +59,15 @@ endif
 all:
 
 # Early infrastructure.
-include $(Base)Vars.mk
-include $(Base)Rules.mk
+include $(BaseDir)Vars.mk
+include $(BaseDir)Rules.mk
 
 # Subdir makefiles.
-include $(Base)libA/Makefile
-include $(Base)libB/Makefile
-include $(Base)cmd1/Makefile
-include $(Base)cmd2/Makefile
-include $(Base)cmd3/Makefile
+include $(BaseDir)libA/Makefile
+include $(BaseDir)libB/Makefile
+include $(BaseDir)cmd1/Makefile
+include $(BaseDir)cmd2/Makefile
+include $(BaseDir)cmd3/Makefile
 
 # Late infrastructure.
-include $(Base)Footer.mk
+include $(BaseDir)Footer.mk

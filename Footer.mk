@@ -30,17 +30,17 @@ all: $(filter $(TgtFilter)%, $(FinalTargets))
 -include $(sort $(PrereqFiles))
 
 # Conventional "clean" target - removes all known, existing target files.
-_inplace := $(patsubst $(Base)%,%,$(wildcard $(FinalTargets) $(IntermediateTargets) $(PrereqFiles)))
+_inplace := $(patsubst $(BaseDir)%,%,$(wildcard $(FinalTargets) $(IntermediateTargets) $(PrereqFiles)))
 .PHONY: clean
 ifneq (,$(_inplace))
-clean: ; cd $(Base) && rm -f $(_inplace)
+clean: ; cd $(BaseDir) && rm -f $(_inplace)
 else
 clean: ; @echo "Already clean!"
 endif
 
 .PHONY: help
 help:
-	@cat $(Base)README
+	@cat $(BaseDir)README
 
 # Causes only targets defined within the current subtree (and their prerequisites)
 # to be considered for build purposes.

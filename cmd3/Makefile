@@ -14,7 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 mfd := $(dir $(realpath $(lastword ${MAKEFILE_LIST})))
-ifndef Base
+ifndef BaseDir
 include $(realpath $(mfd)..)/Makefile
 else
 ###################### IGNORE ABOVE ###############################
