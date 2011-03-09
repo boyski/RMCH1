@@ -30,21 +30,23 @@ all: $(filter $(TgtFilter)%, $(FinalTargets))
 -include $(sort $(PrereqFiles))
 
 # Conventional "clean" target - removes all known, existing target files.
-_inplace := $(patsubst $(BaseDir)%,%,$(wildcard $(FinalTargets) $(IntermediateTargets) $(PrereqFiles)))
+_targets := $(FinalTargets) $(IntermediateTargets) $(PrereqFiles)
+_reltgts := $(patsubst $(BaseDir)%,%,$(wildcard $(_targets)))
 .PHONY: clean
-ifneq (,$(_inplace))
-clean: ; cd $(BaseDir) && rm -f $(_inplace)
+ifneq (,$(_reltgts))
+clean: ; cd $(BaseDir) && rm -f $(_reltgts)
 else
 clean: ; @echo "Already clean!"
 endif
 
+# Cleans not only official targets but also any typical target types
+# (files ending with the extensions listed below) which may not be
+# mentioned as a target.
 _exts := *.o *.d *.a
 _dirs := $(sort $(dir $(realpath ${MAKEFILE_LIST})))
-_litter := $(wildcard $(sort $(foreach _dir,$(_dirs),$(addprefix $(_dir),$(_exts)))))
-
 .PHONY: realclean
 realclean:
-	cd $(BaseDir) && rm -f $(patsubst $(BaseDir)%,%,$(_litter))
+	cd $(BaseDir) && rm -f $(patsubst $(BaseDir)%,%,$(sort $(wildcard $(_targets) $(foreach _dir,$(_dirs),$(addprefix $(_dir),$(_exts))))))
 
 .PHONY: help
 help:
