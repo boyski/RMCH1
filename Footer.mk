@@ -38,6 +38,14 @@ else
 clean: ; @echo "Already clean!"
 endif
 
+_exts := *.o *.d *.a
+_dirs := $(sort $(dir $(realpath ${MAKEFILE_LIST})))
+_litter := $(wildcard $(sort $(foreach _dir,$(_dirs),$(addprefix $(_dir),$(_exts)))))
+
+.PHONY: realclean
+realclean:
+	cd $(BaseDir) && rm -f $(patsubst $(BaseDir)%,%,$(_litter))
+
 .PHONY: help
 help:
 	@cat $(BaseDir)README
