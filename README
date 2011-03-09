@@ -20,3 +20,8 @@ Note: although this implementation is GPL, it exists primarily to
 illustrate ideas which are not themselves licensed or licensable.
 It should be trivial to transfer the ideas without GPL
 contamination, which is explicitly the intended use.
+
+TODO:
+
+- Port to Windows (still using GNU make though). This basically
+  means abstracting assumptions about extensions, compilers, etc.

@@ -45,6 +45,7 @@ LDFLAGS			:=
 CC			:= gcc
 
 a			:= a
+d			:= d
 o			:= o
 
 endif #VARS_

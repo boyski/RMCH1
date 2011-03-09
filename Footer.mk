@@ -42,7 +42,7 @@ endif
 # Cleans not only official targets but also any typical target types
 # (files ending with the extensions listed below) which may not be
 # mentioned as a target.
-_exts := *.o *.d *.a
+_exts := *.$a *.$d *.$o
 _dirs := $(sort $(dir $(realpath ${MAKEFILE_LIST})))
 .PHONY: realclean
 realclean:

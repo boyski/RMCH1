@@ -20,8 +20,16 @@ RULES_ := 1
 
 vpath %.$a $(LibDir)
 
-%.o: %.c
-	$(strip $(subst $(BaseDir),$${BASE}, $(CC) -c -o $@ -MD -I$(IncDir) $<))
+# Support both traditional ("gcc -MD") and AO ("ao -MD run make ...") ways
+# of dependency generation. See http://audited-objects.sourceforge.net
+# for the latter.
+ifdef AO_BASE_DIR
+%.$o: %.c
+	$(strip $(subst $(BaseDir),$${BASE}, $(CC) -c -o $@ -I$(IncDir) $<))
+else
+%.$o: %.c
+	$(strip $(subst $(BaseDir),$${BASE}, $(CC) -c -o $@ -MD -MF $@.$d -I$(IncDir) $<))
+endif
 
 ###############################################################
 # Generates rules for static libraries, aka archive libraries.
@@ -34,9 +42,9 @@ $(LibDir)/$(notdir $(1)).$a: $$($(1)_objs)
 	$$(strip $$(subst $$(BaseDir),$$$${BASE},cd $$(<D) &&\
 	$(RM) $$@ &&\
 	$(AR) -cr $$@ $$(^F)))
-PrereqFiles		+= $$(patsubst %.o,%.d,$$($(1)_objs))
 IntermediateTargets	+= $$($(1)_objs)
 FinalTargets		+= $(LibDir)/$(notdir $(1)).$a
+PrereqFiles		+= $$(addsuffix .$d,$$($(1)_objs))
 endef
 
 ###############################################################
@@ -54,9 +62,9 @@ endif
 	$$(strip $$(subst $$(BaseDir),$$$${BASE},\
 	cd $$(@D) &&\
 	$(CC) -o $$(@F) $(LDFLAGS) $$^))
-PrereqFiles		+= $$(patsubst %.o,%.d,$$($(1)_objs))
 IntermediateTargets	+= $$($(1)_objs)
 FinalTargets		+= $(1)
+PrereqFiles		+= $$(addsuffix .$d,$$($(1)_objs))
 endef
 
 endif #RULES_
