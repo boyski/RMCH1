@@ -43,7 +43,7 @@ endif
 # (files ending with the extensions listed below) which may not be
 # mentioned as a target.
 _exts := *.$a *.$d *.$o
-_dirs := $(sort $(dir $(realpath ${MAKEFILE_LIST})))
+_dirs := $(sort $(dir $(realpath ${MAKEFILE_LIST}))) $(BaseDir)lib/
 .PHONY: realclean
 realclean:
 	cd $(BaseDir) && rm -f $(patsubst $(BaseDir)%,%,$(sort $(wildcard $(_targets) $(foreach _dir,$(_dirs),$(addprefix $(_dir),$(_exts))))))
