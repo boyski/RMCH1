@@ -17,8 +17,9 @@
 ##
 ## Make offers two equivalent ways of expanding variables: $() and ${}.
 ## We try to use ${} for variables derived from the environment and
-## $() for normal make variables, e.g. ${DISPLAY} vs $(CFLAGS). A
-## useful visual mnemonic, that's all.
+## $() for normal make variables, e.g. ${DISPLAY} vs $(CFLAGS). It's a
+## useful visual mnemonic and allows the output of "make -n" to remain
+## parameterized and be pasted directly into a shell, as demo-ed here.
 ##
 ## Variable (aka macro) case is as follows: UPPERCASE for make
 ## builtins, variables inherited from the environment, and "parameter
