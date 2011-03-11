@@ -58,15 +58,20 @@ help:
 subtree:
 	$(MAKE) --no-print-directory -f $(firstword $(MAKEFILE_LIST)) TgtFilter=$(CURDIR)/
 
-# Support both traditional ("gcc -MD") and AO ("ao -MD run make ...") ways
-# of dependency generation. See http://audited-objects.sourceforge.net
-# for the latter.
+.SECONDEXPANSION:
+
+# Support both traditional ("gcc -c -MD ...") and AO ("ao -MD make ...")
+# ways of dependency generation.
+# See http://gcc.gnu.org/onlinedocs/gcc-4.3.5/gcc/Preprocessor-Options.html#Preprocessor-Options
+# for the former and http://audited-objects.sourceforge.net for the latter.
 ifdef AO_BASE_DIR
 %.$o: %.c
-	$(strip $(subst $(BaseDir),$${BASE}, $(CC) -c -o $@ -I$(IncDir) $<))
+	$(strip $(subst $(BaseDir),$${BASE},$(CC) -c -o $@ -I$(IncDir) $<))
 else
-%.$o: %.c
-	$(strip $(subst $(BaseDir),$${BASE}, $(CC) -c -o $@ -MD -MF $@.$d -I$(IncDir) $<))
+.PHONY: _FORCE
+%.$o: %.c $$(if $$(filter-out $$(CMD_$$(subst $$(BaseDir),,$$@)),$$(strip $$(subst $$(BaseDir),$$$${BASE},$$(CC) -c -o $$@ -MD -MF $$@.$d -I$$(IncDir) $$<))),_FORCE)
+	$(strip $(subst $(BaseDir),$${BASE},$(CC) -c -o $@ -MD -MF $@.$d -I$(IncDir) $<))
+	@echo 'CMD_$(subst $(BaseDir),,$@) := $(strip $(subst $(BaseDir),$$$${BASE},$(CC) -c -o $@ -MD -MF $@.$d -I$(IncDir) $<))' >> $@.$d
 endif
 
 endif #FOOTER_
