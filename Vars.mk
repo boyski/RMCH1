@@ -34,9 +34,9 @@ AllPrograms		:=
 IncDir			:= $(BaseDir)include
 LibDir			:= $(BaseDir)lib
 
-# It's critical that directories never be *created* in recipes
-# because that leads to a race condition under -j. This method
-# is guaranteed to be single-threaded.
+# It's a good idea to never create directories in recipes since
+# that can lead to a race condition under -j. This method is
+# guaranteed to be single-threaded and to run before recipes.
 $(shell [ -d $(LibDir) ] || set -x; mkdir -p $(LibDir))
 
 CFLAGS			:= -I$(IncDir)

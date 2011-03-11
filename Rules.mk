@@ -20,17 +20,6 @@ RULES_ := 1
 
 vpath %.$a $(LibDir)
 
-# Support both traditional ("gcc -MD") and AO ("ao -MD run make ...") ways
-# of dependency generation. See http://audited-objects.sourceforge.net
-# for the latter.
-ifdef AO_BASE_DIR
-%.$o: %.c
-	$(strip $(subst $(BaseDir),$${BASE}, $(CC) -c -o $@ -I$(IncDir) $<))
-else
-%.$o: %.c
-	$(strip $(subst $(BaseDir),$${BASE}, $(CC) -c -o $@ -MD -MF $@.$d -I$(IncDir) $<))
-endif
-
 ###############################################################
 # Generates rules for static libraries, aka archive libraries.
 # Also generates a phony rule using the basename of the target.

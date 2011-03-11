@@ -58,4 +58,15 @@ help:
 subtree:
 	$(MAKE) --no-print-directory -f $(firstword $(MAKEFILE_LIST)) TgtFilter=$(CURDIR)/
 
+# Support both traditional ("gcc -MD") and AO ("ao -MD run make ...") ways
+# of dependency generation. See http://audited-objects.sourceforge.net
+# for the latter.
+ifdef AO_BASE_DIR
+%.$o: %.c
+	$(strip $(subst $(BaseDir),$${BASE}, $(CC) -c -o $@ -I$(IncDir) $<))
+else
+%.$o: %.c
+	$(strip $(subst $(BaseDir),$${BASE}, $(CC) -c -o $@ -MD -MF $@.$d -I$(IncDir) $<))
+endif
+
 endif #FOOTER_
