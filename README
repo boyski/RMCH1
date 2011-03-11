@@ -8,13 +8,19 @@ Makefiles include each other to form a single logical Makefile
 which has the same behavior regardless of the point of entry.
 
 Another feature, not particularly unique, is that all actual build
-logic is contained in global files (*.mk) which do not clutter the
-developer's view of the world. The leaf makefiles (the ones
-actually called "Makefile") are boilerplate and tend to contain
-only lists of desired targets.
+logic is contained in files (*.mk) at the root of the tree which do
+not clutter the developer's view of the world. User-visible
+makefiles (the ones actually called "Makefile") are boilerplate and
+tend to contain only lists of desired targets.
 
-Usage is typical: "make" to build everything, "make clean" to
-remove build targets, "make help" to see this message.
+This model demonstrates dependency generation for C and C++ code.
+It also implements a system adapted from the Linux kernel which
+invalidates object files and triggers a rebuild when compiler flags
+change.
+
+Usage respects conventionals: "make" or "make all" to build
+everything, "make clean" to remove build targets, "make help" to
+see this message.
 
 Note: although this implementation is GPL, it exists primarily to
 illustrate ideas which are not themselves licensed or licensable.
@@ -25,3 +31,4 @@ TODO:
 
 - Port to Windows (still using GNU make though). This basically
   means abstracting assumptions about extensions, compilers, etc.
+  and probably skipping dependency generation unless using MinGW.

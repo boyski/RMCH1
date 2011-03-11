@@ -45,12 +45,12 @@
 BaseDir := $(dir $(realpath $(lastword ${MAKEFILE_LIST})))
 export BASE := $(BaseDir)
 
-ifneq (,$(filter 3.7% 3.80% 3.81%, $(MAKE_VERSION)))
-$(error Error: GNU make 3.82 or above required)
+ifneq (,$(filter 3.7% 3.80%,$(MAKE_VERSION)))
+$(error Error: GNU make 3.81 or above required)
 endif
 
 # Make sure the log file contains a record of the invocation.
-ifeq (,$(filter %clean, $(MAKECMDGOALS)))
+ifeq (,$(filter %clean,$(MAKECMDGOALS)))
 $(info + export BASE=$(BASE))
 $(info + "$(strip $(MAKE) $(MFLAGS) -f $(firstword $(MAKEFILE_LIST)) $(MAKECMDGOALS))" in $(CURDIR))
 endif

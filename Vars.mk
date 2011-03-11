@@ -59,7 +59,7 @@ o			:= o
 # Generates rules for static libraries, aka archive libraries.
 # Also generates a phony rule using the basename of the target.
 ###############################################################
-define _ArchiveRule =
+define _ArchiveRule
 .PHONY: $(notdir $(1))
 $(notdir $(1)): $(LibDir)/$(notdir $(1)).$a
 $(LibDir)/$(notdir $(1)).$a: $$($(1)_objs)
@@ -75,7 +75,7 @@ endef
 # Generates rules for binary executable programs.
 # Also generates a phony rule using the basename of the target.
 ###############################################################
-define _ProgramRule =
+define _ProgramRule
 .PHONY: $(notdir $(1))
 $(notdir $(1)): $(1)
 ifeq (,$$($(1)_libs))
