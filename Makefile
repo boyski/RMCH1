@@ -51,17 +51,21 @@ endif
 
 # Make sure the log file contains a record of the invocation.
 ifeq (,$(filter %clean, $(MAKECMDGOALS)))
-$(info + "$(strip $(MAKE) $(MFLAGS) -f $(firstword $(MAKEFILE_LIST)) $(MAKECMDGOALS))" in $(CURDIR))
 $(info + export BASE=$(BASE))
+$(info + "$(strip $(MAKE) $(MFLAGS) -f $(firstword $(MAKEFILE_LIST)) $(MAKECMDGOALS))" in $(CURDIR))
 endif
 
 # Reserve 'all' early on as the default target.
 .PHONY: all
 all:
 
+# All rules used here should be explicit.
+.SUFFIXES:
+
 # Early infrastructure.
 include $(BaseDir)Vars.mk
-include $(BaseDir)Rules.mk
+
+vpath %.$a $(LibDir)
 
 # Subdir makefiles.
 include $(BaseDir)libA/Makefile
