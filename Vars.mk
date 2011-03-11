@@ -22,6 +22,9 @@ VARS_ := 1
 # recursive. Therefore, if a variable can be simply-expanded
 # it's a good idea to initialize it with := here.
 
+Space			:=
+Space			+=
+
 TgtFilter		:=
 
 PrereqFiles		:=
@@ -39,7 +42,11 @@ LibDir			:= $(BaseDir)lib
 # guaranteed to be single-threaded and to run before recipes.
 $(shell [ -d $(LibDir) ] || set -x; mkdir -p $(LibDir))
 
-CFLAGS			:= -I$(IncDir)
+CFLAGS			:= -W
+DFLAGS			:=
+IFLAGS			:= -I$(IncDir)
+_cflags			:= $(CFLAGS) $(DFLAGS) $(IFLAGS)
+
 LDFLAGS			:=
 
 CC			:= gcc

@@ -62,16 +62,20 @@ subtree:
 
 # Support both traditional ("gcc -c -MD ...") and AO ("ao -MD make ...")
 # ways of dependency generation.
-# See http://gcc.gnu.org/onlinedocs/gcc-4.3.5/gcc/Preprocessor-Options.html#Preprocessor-Options
-# for the former and http://audited-objects.sourceforge.net for the latter.
+# See http://audited-objects.sourceforge.net for the former and
+# http://gcc.gnu.org/onlinedocs/gcc-4.3.5/gcc/Preprocessor-Options.html#Preprocessor-Options
+# for the latter.
+# The non-AO case implements a pattern borrowed and modified from the
+# Linux kernel designed to trigger a rebuild on recipe changes.
 ifdef AO_BASE_DIR
 %.$o: %.c
-	$(strip $(subst $(BaseDir),$${BASE},$(CC) -c -o $@ -I$(IncDir) $<))
+	$(strip $(subst $(BaseDir),$${BASE},$(CC) -c -o $@ $(_cflags) $<))
 else
 .PHONY: _FORCE
-%.$o: %.c $$(if $$(filter-out $$(CMD_$$(subst $$(BaseDir),,$$@)),$$(strip $$(subst $$(BaseDir),$$$${BASE},$$(CC) -c -o $$@ -MD -MF $$@.$d -I$$(IncDir) $$<))),_FORCE)
-	$(strip $(subst $(BaseDir),$${BASE},$(CC) -c -o $@ -MD -MF $@.$d -I$(IncDir) $<))
-	@echo 'CMD_$(subst $(BaseDir),,$@) := $(strip $(subst $(BaseDir),$$$${BASE},$(CC) -c -o $@ -MD -MF $@.$d -I$(IncDir) $<))' >> $@.$d
+%.$o: _cmd = $(strip $(subst $(BaseDir),$${BASE},$(CC) -c -o $@ -MD -MF $@.$d $(_cflags) $(basename $@).c))
+%.$o: %.c $$(if $$(filter $$(CMD_$$(subst $$(BaseDir),,$$@)),$$(subst $$(Space),_,$$(_cmd))),,_FORCE)
+	$(_cmd)
+	@echo 'CMD_$(subst $(BaseDir),,$@) := $(subst $(Space),_,$(subst $$,$$$$,$(_cmd)))' >> $@.$d
 endif
 
 endif #FOOTER_
