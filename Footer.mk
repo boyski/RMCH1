@@ -61,18 +61,18 @@ subtree:
 .SECONDEXPANSION:
 
 # Support both traditional ("gcc -c -MD ...") and AO ("ao -MD make ...")
-# ways of dependency generation.
+# methods of dependency generation.
 # See http://audited-objects.sourceforge.net for the former and
 # http://gcc.gnu.org/onlinedocs/gcc-4.3.5/gcc/Preprocessor-Options.html#Preprocessor-Options
 # for the latter.
-# The non-AO case implements a pattern borrowed and modified from the
-# Linux kernel designed to trigger a rebuild on recipe changes.
+# The non-AO case implements a pattern adapted from the
+# Linux kernel designed to trigger rebuilds on recipe changes.
 ifdef AO_BASE_DIR
 %.$o: %.c
 	$(strip $(subst $(BaseDir),$${BASE},$(CC) -c -o $@ $(_cflags) $<))
 else
 .PHONY: _FORCE
-%.$o: _cmd = $(strip $(subst $(BaseDir),$${BASE},$(CC) -c -o $@ -MD -MF $@.$d $(_cflags) $(basename $@).c))
+%.$o: _cmd = $(strip $(subst $(BaseDir),$${BASE},$(CC) -c -o $@ -MD -MF $@.$d $(_cflags) $(@:.$o=.c)))
 %.$o: %.c $$(if $$(filter $$(CMD_$$(subst $$(BaseDir),,$$@)),$$(subst $$(Space),_,$$(_cmd))),,_FORCE)
 	$(_cmd)
 	@echo 'CMD_$(subst $(BaseDir),,$@) := $(subst $(Space),_,$(subst $$,$$$$,$(_cmd)))' >> $@.$d
