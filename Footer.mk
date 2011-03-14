@@ -73,9 +73,9 @@ ifdef AO_BASE_DIR
 else
 .PHONY: _FORCE
 %.$o: _cmd = $(strip $(subst $(BaseDir),$${BASE},$(CC) -c -o $@ -MD -MF $@.$d $(_cflags) $(@:.$o=.c)))
-%.$o: %.c $$(if $$(filter $$(CMD_$$(subst $$(BaseDir),,$$@)),$$(subst $$(Space),_,$$(_cmd))),,_FORCE)
+%.$o: %.c $$(if $$(filter $$(Recipe_$$(subst $$(BaseDir),,$$@)),$$(subst $$(Space),_,$$(_cmd))),,_FORCE)
 	$(_cmd)
-	@echo 'CMD_$(subst $(BaseDir),,$@) := $(subst $(Space),_,$(subst $$,$$$$,$(_cmd)))' >> $@.$d
+	@echo 'Recipe_$(subst $(BaseDir),,$@) := $(subst $(Space),_,$(subst $$,$$$$,$(_cmd)))' >> $@.$d
 endif
 
 endif #FOOTER_
