@@ -37,8 +37,8 @@ AllPrograms		:=
 IncDir			:= $(BaseDir)include
 LibDir			:= $(BaseDir)lib
 
-# It's a good idea to never create directories in recipes since
-# that can lead to a race condition under -j. This method is
+# It's not a good idea to create directories in recipes since
+# it can lead to a race condition under -j. The method here is
 # guaranteed to be single-threaded and to run before recipes.
 $(shell [ -d $(LibDir) ] || set -x; mkdir -p $(LibDir))
 

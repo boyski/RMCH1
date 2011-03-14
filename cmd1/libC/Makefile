@@ -1,5 +1,4 @@
 # Copyright (c) 2002-2011 David Boyce.  All rights reserved.
-
 mfd := $(dir $(realpath $(lastword ${MAKEFILE_LIST})))
 ifndef BaseDir
 include $(realpath $(mfd)../..)/Makefile

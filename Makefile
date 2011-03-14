@@ -13,21 +13,32 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+######################################################################
+##	CHANGES
+##
+## If a directory is moved, it's necessary to change the path by
+## which its Makefile included below. That should be the only
+## non-local change required. Similarly, if a new directory is
+## created its Makefile must be added to the list below.
+######################################################################
+
+######################################################################
 ##	CODING CONVENTIONS
 ##
 ## Make offers two equivalent ways of expanding variables: $() and ${}.
 ## We try to use ${} for variables derived from the environment and
 ## $() for normal make variables, e.g. ${DISPLAY} vs $(CFLAGS). It's a
 ## useful visual mnemonic and allows the output of "make -n" to remain
-## parameterized and be pasted directly into a shell, as demo-ed here.
+## parameterized and be pasted directly into a shell.
 ##
 ## Variable (aka macro) case is as follows: UPPERCASE for make
 ## builtins, variables inherited from the environment, and "parameter
 ## variables" (see below), CamelCase for internally-defined variables
-## with logically global scope, and lowercase for those with logically
-## limited scope. Since make does not offer actual lexical scoping
-## this latter distinction is more a matter of style than
-## language. This is more or less in line with the GNU Make
+## with logically global scope, lowercase for those with logically
+## limited scope, and a leading underscore for thos which are not for
+## the eyes of users. Since make does not offer actual lexical scoping,
+## observing the conventions is particularly important.
+## The above is more or less in line with the GNU Make
 ## Manual which says "It is traditional to use upper case letters
 ## in variable names, but we recommend using lower case letters
 ## for variable names that serve internal purposes in the
@@ -36,8 +47,12 @@
 ## with command options."
 ##
 ## Directory values like $(BaseDir) contain a trailing slash so you can
-## (and should!) refer to $(BaseDir)foobar rather than $(BaseDir)/foobar which
-## can result in subtle errors.
+## (and should!) refer to $(BaseDir)foobar rather than $(BaseDir)/foobar
+## which can result in subtle errors. An advantage of this is that
+## when BaseDir == ".", which is the typical case, if ${BaseDir}
+## evaluates to the null string (such as when pasted into a test script)
+## everything will still work.
+######################################################################
 
 # Determine the root of the build tree. There's one variable
 # which is used internally to make, and another with the same
@@ -67,7 +82,7 @@ include $(BaseDir)Vars.mk
 
 vpath %.$a $(LibDir)
 
-# Subdir makefiles.
+# All subdir makefiles must be listed here.
 include $(BaseDir)libA/Makefile
 include $(BaseDir)libB/Makefile
 include $(BaseDir)cmd1/Makefile
