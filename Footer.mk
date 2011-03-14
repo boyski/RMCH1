@@ -1,7 +1,7 @@
 ifndef FOOTER_
 FOOTER_ := 1
 
-# Copyright (c) 2002-2010 David Boyce.  All rights reserved.
+# Copyright (c) 2002-2011 David Boyce.  All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -61,15 +61,15 @@ subtree:
 .SECONDEXPANSION:
 
 # The following supports the traditional gcc -MD flags for dependency generation
-# during C compilation steps. Also implements a pattern adapted from the
+# during C compilation steps. It also implements a pattern adapted from the
 # Linux kernel designed to trigger rebuilds on recipe changes.
 # See http://make.mad-scientist.us/autodep.html and
 # http://gcc.gnu.org/onlinedocs/gcc-4.3.5/gcc/Preprocessor-Options.html#Preprocessor-Options
-# for background details.
+# for details on the former and a modern Linux kernel tree for the latter.
 
-.PHONY: _RECIPE_CHANGED
+.PHONY: RECIPE_CHANGED
 %.$o: _cmd = $(strip $(subst $(BaseDir),$${BASE},$(CC) -c -o $@ -MD -MF $@.$d $(_cflags) $(@:.$o=.c)))
-%.$o: %.c $$(if $$(filter $$(Recipe_$$(subst $$(BaseDir),,$$@)),$$(subst $$(Space),_,$$(_cmd))),,_RECIPE_CHANGED)
+%.$o: %.c $$(if $$(filter $$(Recipe_$$(subst $$(BaseDir),,$$@)),$$(subst $$(Space),_,$$(_cmd))),,RECIPE_CHANGED)
 	$(_cmd)
 	@echo 'Recipe_$(subst $(BaseDir),,$@) := $(subst $(Space),_,$(subst $$,$$$$,$(_cmd)))' >> $@.$d
 
