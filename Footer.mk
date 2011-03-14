@@ -67,9 +67,9 @@ subtree:
 # http://gcc.gnu.org/onlinedocs/gcc-4.3.5/gcc/Preprocessor-Options.html#Preprocessor-Options
 # for background details.
 
-.PHONY: _FORCE
+.PHONY: _RECIPE_CHANGED
 %.$o: _cmd = $(strip $(subst $(BaseDir),$${BASE},$(CC) -c -o $@ -MD -MF $@.$d $(_cflags) $(@:.$o=.c)))
-%.$o: %.c $$(if $$(filter $$(Recipe_$$(subst $$(BaseDir),,$$@)),$$(subst $$(Space),_,$$(_cmd))),,_FORCE)
+%.$o: %.c $$(if $$(filter $$(Recipe_$$(subst $$(BaseDir),,$$@)),$$(subst $$(Space),_,$$(_cmd))),,_RECIPE_CHANGED)
 	$(_cmd)
 	@echo 'Recipe_$(subst $(BaseDir),,$@) := $(subst $(Space),_,$(subst $$,$$$$,$(_cmd)))' >> $@.$d
 
