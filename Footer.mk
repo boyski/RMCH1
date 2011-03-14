@@ -60,22 +60,17 @@ subtree:
 
 .SECONDEXPANSION:
 
-# Support both traditional ("gcc -c -MD ...") and AO ("ao -MD make ...")
-# methods of dependency generation.
-# See http://audited-objects.sourceforge.net for the former and
-# http://gcc.gnu.org/onlinedocs/gcc-4.3.5/gcc/Preprocessor-Options.html#Preprocessor-Options
-# for the latter.
-# The non-AO case implements a pattern adapted from the
+# The following supports the traditional gcc -MD flags for dependency generation
+# during C compilation steps. Also implements a pattern adapted from the
 # Linux kernel designed to trigger rebuilds on recipe changes.
-ifdef AO_BASE_DIR
-%.$o: %.c
-	$(strip $(subst $(BaseDir),$${BASE},$(CC) -c -o $@ $(_cflags) $<))
-else
+# See http://make.mad-scientist.us/autodep.html and
+# http://gcc.gnu.org/onlinedocs/gcc-4.3.5/gcc/Preprocessor-Options.html#Preprocessor-Options
+# for background details.
+
 .PHONY: _FORCE
 %.$o: _cmd = $(strip $(subst $(BaseDir),$${BASE},$(CC) -c -o $@ -MD -MF $@.$d $(_cflags) $(@:.$o=.c)))
 %.$o: %.c $$(if $$(filter $$(Recipe_$$(subst $$(BaseDir),,$$@)),$$(subst $$(Space),_,$$(_cmd))),,_FORCE)
 	$(_cmd)
 	@echo 'Recipe_$(subst $(BaseDir),,$@) := $(subst $(Space),_,$(subst $$,$$$$,$(_cmd)))' >> $@.$d
-endif
 
 endif #FOOTER_
