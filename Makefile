@@ -88,12 +88,9 @@ include $(SrcBase)Vars.mk
 
 vpath %.$a $(LibDir)
 
-# All subdir makefiles must be listed here.
-include $(SrcBase)libA/Makefile
-include $(SrcBase)libB/Makefile
-include $(SrcBase)cmd1/Makefile
-include $(SrcBase)cmd2/Makefile
-include $(SrcBase)cmd3/Makefile
+# Pull in all involved subdirectories.
+include $(SrcBase)SubDirs.mk
+include $(addprefix $(SrcBase),$(addsuffix /Makefile,$(SubDirs)))
 
 # Late infrastructure.
 include $(SrcBase)Footer.mk

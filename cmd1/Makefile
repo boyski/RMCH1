@@ -10,8 +10,5 @@ AllPrograms		+= $(td)cmd1
 $(td)cmd1_objs		:= $(td)main.$o
 $(td)cmd1_libs		:= libA.$a libB.$a libC.$a
 
-# Sub-includes must be at the bottom.
-include $(mfd)libC/Makefile
-
 ###################### IGNORE BELOW ###############################
 endif

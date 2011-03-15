@@ -81,7 +81,8 @@ subtree:
 
 .PHONY: RECIPE_CHANGED
 $(TgtBase)%.$o: _cmd = $(strip $(subst $(SrcBase),$${BASE},$(CC) -c -o $@ -MD -MF $@.$d $(_cflags) $(subst $(TgtBase),$(SrcBase),$(@:.$o=.c))))
-$(TgtBase)%.$o: $(SrcBase)%.c $$(if $$(filter $$(Recipe_$$(subst $$(TgtBase),,$$@)),$$(subst $$(Space),_,$$(_cmd))),,RECIPE_CHANGED)
+$(TgtBase)%.$o: $(SrcBase)%.c
+$(TgtBase)%.$o: $$(if $$(filter $$(Recipe_$$(subst $$(TgtBase),,$$@)),$$(subst $$(Space),_,$$(_cmd))),,RECIPE_CHANGED)
 	$(_cmd)
 	@echo 'Recipe_$(subst $(TgtBase),,$@) := $(subst $(Space),_,$(subst $$,$$$$,$(_cmd)))' >> $@.$d
 
