@@ -1,15 +1,16 @@
 # Copyright (c) 2002-2011 David Boyce.  All rights reserved.
 mfd := $(dir $(realpath $(lastword ${MAKEFILE_LIST})))
-ifndef BaseDir
+ifndef SrcBase
 include $(realpath $(mfd)..)/Makefile
 else
+$(call InitDir,$(mfd))
 ###################### IGNORE ABOVE ###############################
 
-AllPrograms		+= $(mfd)cmd1
-$(mfd)cmd1_objs		:= $(mfd)main.$o
-$(mfd)cmd1_libs		:= libA.$a libB.$a libC.$a
+AllPrograms		+= $(td)cmd1
+$(td)cmd1_objs		:= $(td)main.$o
+$(td)cmd1_libs		:= libA.$a libB.$a libC.$a
 
-# Includes must be at the bottom.
+# Sub-includes must be at the bottom.
 include $(mfd)libC/Makefile
 
 ###################### IGNORE BELOW ###############################

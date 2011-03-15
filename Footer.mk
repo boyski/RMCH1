@@ -29,12 +29,20 @@ all: $(filter $(TgtFilter)%, $(FinalTargets))
 # Pick up all generated dependency information.
 -include $(sort $(PrereqFiles))
 
-# Conventional "clean" target - removes all known, existing target files.
+# The complete list of all known targets.
 _targets := $(FinalTargets) $(IntermediateTargets) $(PrereqFiles)
-_reltgts := $(patsubst $(BaseDir)%,%,$(wildcard $(_targets)))
+
+# Directories for targets may need to be created on the fly
+# (via order-only dependencies and in a thread-safe way).
+_tgtdirs := $(sort $(dir $(_targets)))
+$(_tgtdirs):
+	mkdir -p $@
+
+# Conventional "clean" target - removes all known, existing target files.
+_reltgts := $(patsubst $(SrcBase)%,%,$(wildcard $(_targets)))
 .PHONY: clean
 ifneq (,$(_reltgts))
-clean: ; cd $(BaseDir) && rm -f $(_reltgts)
+clean: ; cd $(SrcBase) && rm -f $(_reltgts)
 else
 clean: ; @echo "Already clean!"
 endif
@@ -43,14 +51,14 @@ endif
 # (files ending with the extensions listed below) which may not be
 # mentioned as a target.
 _exts := *.$a *.$d *.$o
-_dirs := $(sort $(dir $(realpath ${MAKEFILE_LIST}))) $(BaseDir)lib/
+_dirs := $(sort $(dir $(realpath ${MAKEFILE_LIST}))) $(SrcBase)lib/
 .PHONY: realclean
 realclean:
-	cd $(BaseDir) && rm -f $(patsubst $(BaseDir)%,%,$(sort $(wildcard $(_targets) $(foreach _dir,$(_dirs),$(addprefix $(_dir),$(_exts))))))
+	cd $(SrcBase) && rm -f $(patsubst $(SrcBase)%,%,$(sort $(wildcard $(_targets) $(foreach _dir,$(_dirs),$(addprefix $(_dir),$(_exts))))))
 
 .PHONY: help
 help:
-	@cat $(BaseDir)README
+	@cat $(SrcBase)README
 
 # Causes only targets defined within the current subtree (and their prerequisites)
 # to be considered for build purposes.
@@ -68,9 +76,9 @@ subtree:
 # for details on the former and a modern Linux kernel tree for the latter.
 
 .PHONY: RECIPE_CHANGED
-%.$o: _cmd = $(strip $(subst $(BaseDir),$${BASE},$(CC) -c -o $@ -MD -MF $@.$d $(_cflags) $(@:.$o=.c)))
-%.$o: %.c $$(if $$(filter $$(Recipe_$$(subst $$(BaseDir),,$$@)),$$(subst $$(Space),_,$$(_cmd))),,RECIPE_CHANGED)
+$(TgtBase)%.$o: _cmd = $(strip $(subst $(SrcBase),$${BASE},$(CC) -c -o $@ -MD -MF $@.$d $(_cflags) $(subst $(TgtBase),$(SrcBase),$(@:.$o=.c))))
+$(TgtBase)%.$o: $(SrcBase)%.c $$(if $$(filter $$(Recipe_$$(subst $$(TgtBase),,$$@)),$$(subst $$(Space),_,$$(_cmd))),,RECIPE_CHANGED)
 	$(_cmd)
-	@echo 'Recipe_$(subst $(BaseDir),,$@) := $(subst $(Space),_,$(subst $$,$$$$,$(_cmd)))' >> $@.$d
+	@echo 'Recipe_$(subst $(TgtBase),,$@) := $(subst $(Space),_,$(subst $$,$$$$,$(_cmd)))' >> $@.$d
 
 endif #FOOTER_

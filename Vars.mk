@@ -34,13 +34,8 @@ FinalTargets		:=
 AllArchives		:=
 AllPrograms		:=
 
-IncDir			:= $(BaseDir)include
-LibDir			:= $(BaseDir)lib
-
-# It's not a good idea to create directories in recipes since
-# it can lead to a race condition under -j. The method here is
-# guaranteed to be single-threaded and to run before recipes.
-$(shell [ -d $(LibDir) ] || set -x; mkdir -p $(LibDir))
+IncDir			:= $(SrcBase)include
+LibDir			:= $(SrcBase)lib/
 
 CFLAGS			:= -W
 DFLAGS			:=
@@ -55,35 +50,42 @@ a			:= a
 d			:= d
 o			:= o
 
+# Extensible initialization call from sub-makefiles.
+InitDir			= $(eval td := $(subst $(SrcBase),$(TgtBase),$(1)))
+
 ###############################################################
-# Generates rules for static libraries, aka archive libraries.
+# Generate rules for static libraries, aka archive libraries.
 # Also generates a phony rule using the basename of the target.
+# And makes an order-only dependency on the target's directory.
 ###############################################################
 define _ArchiveRule
 .PHONY: $(notdir $(1))
-$(notdir $(1)): $(LibDir)/$(notdir $(1)).$a
-$(LibDir)/$(notdir $(1)).$a: $$($(1)_objs)
-	$$(strip $$(subst $$(BaseDir),$$$${BASE},cd $$(<D) &&\
+$(notdir $(1)): $(LibDir)$(notdir $(1)).$a
+$$($(1)_objs): | $$(sort $$(dir $$($(1)_objs)))
+$(LibDir)$(notdir $(1)).$a: $$($(1)_objs) | $(LibDir)
+	$$(strip $$(subst $$(SrcBase),$$$${BASE},cd $$(<D) &&\
 	$(RM) $$@ &&\
 	$(AR) -cr $$@ $$(^F)))
 IntermediateTargets	+= $$($(1)_objs)
-FinalTargets		+= $(LibDir)/$(notdir $(1)).$a
+FinalTargets		+= $(LibDir)$(notdir $(1)).$a
 PrereqFiles		+= $$(addsuffix .$d,$$($(1)_objs))
 endef
 
 ###############################################################
 # Generates rules for binary executable programs.
 # Also generates a phony rule using the basename of the target.
+# And makes an order-only dependency on the target's directory.
 ###############################################################
 define _ProgramRule
 .PHONY: $(notdir $(1))
 $(notdir $(1)): $(1)
+$$($(1)_objs): | $$(sort $$(dir $$($(1)_objs)))
 ifeq (,$$($(1)_libs))
 $(1): $$($(1)_objs)
 else
-$(1): $$($(1)_objs) $(addprefix $(LibDir)/,$$($(1)_libs))
+$(1): $$($(1)_objs) $(addprefix $(LibDir),$$($(1)_libs))
 endif
-	$$(strip $$(subst $$(BaseDir),$$$${BASE},\
+	$$(strip $$(subst $$(SrcBase),$$$${BASE},\
 	cd $$(@D) &&\
 	$(CC) -o $$(@F) $(LDFLAGS) $$^))
 IntermediateTargets	+= $$($(1)_objs)

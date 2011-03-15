@@ -1,12 +1,13 @@
 # Copyright (c) 2002-2011 David Boyce.  All rights reserved.
 mfd := $(dir $(realpath $(lastword ${MAKEFILE_LIST})))
-ifndef BaseDir
+ifndef SrcBase
 include $(realpath $(mfd)..)/Makefile
 else
+$(call InitDir,$(mfd))
 ###################### IGNORE ABOVE ###############################
 
-AllArchives		+= $(mfd)libB
-$(mfd)libB_objs		:= $(mfd)b1.$o $(mfd)b2.$o
+AllArchives		+= $(td)libB
+$(td)libB_objs		:= $(td)b1.$o $(td)b2.$o
 
 ###################### IGNORE BELOW ###############################
 endif

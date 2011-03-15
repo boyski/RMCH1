@@ -46,23 +46,29 @@
 ## implicit rules or for parameters that the user should override
 ## with command options."
 ##
-## Directory values like $(BaseDir) contain a trailing slash so you can
-## (and should!) refer to $(BaseDir)foobar rather than $(BaseDir)/foobar
+## Directory values like $(SrcBase) contain a trailing slash so you can
+## (and should!) refer to $(SrcBase)foobar rather than $(SrcBase)/foobar
 ## which can result in subtle errors. An advantage of this is that
-## when BaseDir == ".", which is the typical case, if ${BaseDir}
+## when SrcBase == ".", which is the typical case, if ${SrcBase}
 ## evaluates to the null string (such as when pasted into a test script)
 ## everything will still work.
 ######################################################################
 
-# Determine the root of the build tree. There's one variable
-# which is used internally to make, and another with the same
-# value which is exported for use in recipes.
-BaseDir := $(dir $(realpath $(lastword ${MAKEFILE_LIST})))
-export BASE := $(BaseDir)
-
 ifneq (,$(filter 3.7% 3.80%,$(MAKE_VERSION)))
 $(error Error: GNU make 3.81 or above required)
 endif
+
+# Determine the root of the source tree. There's one variable
+# which is used internally to make, and another with the same
+# value which is exported for use in recipes.
+SrcBase := $(dir $(realpath $(lastword ${MAKEFILE_LIST})))
+export BASE := $(SrcBase)
+
+# Determine the target architecture and its directory.
+Arch := $(shell uname -s)_$(shell uname -p)
+TgtBase := $(SrcBase)$(Arch)
+$(shell [ -d $(TgtBase) ] || set -x; mkdir -p $(TgtBase))
+TgtBase := $(realpath $(SrcBase)$(Arch))/
 
 # Make sure the log file contains a record of the invocation.
 ifeq (,$(filter %clean,$(MAKECMDGOALS)))
@@ -78,16 +84,16 @@ all:
 .SUFFIXES:
 
 # Early infrastructure.
-include $(BaseDir)Vars.mk
+include $(SrcBase)Vars.mk
 
 vpath %.$a $(LibDir)
 
 # All subdir makefiles must be listed here.
-include $(BaseDir)libA/Makefile
-include $(BaseDir)libB/Makefile
-include $(BaseDir)cmd1/Makefile
-include $(BaseDir)cmd2/Makefile
-include $(BaseDir)cmd3/Makefile
+include $(SrcBase)libA/Makefile
+include $(SrcBase)libB/Makefile
+include $(SrcBase)cmd1/Makefile
+include $(SrcBase)cmd2/Makefile
+include $(SrcBase)cmd3/Makefile
 
 # Late infrastructure.
-include $(BaseDir)Footer.mk
+include $(SrcBase)Footer.mk
