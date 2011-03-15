@@ -63,7 +63,7 @@ define _ArchiveRule
 $(notdir $(1)): $(LibDir)$(notdir $(1)).$a
 $$($(1)_objs): | $$(sort $$(dir $$($(1)_objs)))
 $(LibDir)$(notdir $(1)).$a: $$($(1)_objs) | $(LibDir)
-	$$(strip $$(subst $$(SrcBase),$$$${BASE},\
+	$$(strip $$(subst $$(SrcBase),$$$${SBASE},\
 	cd $$(<D) &&\
 	$(RM) $$@ &&\
 	$(AR) -cr $$@ $$(^F)))
@@ -82,7 +82,7 @@ define _ProgramRule
 $(notdir $(1)): $(1)
 $$($(1)_objs): | $$(sort $$(dir $$($(1)_objs)))
 $(1): $$($(1)_objs) $$(if $$($(1)_libs),$$(addprefix $(LibDir),$$($(1)_libs)))
-	$$(strip $$(subst $$(SrcBase),$$$${BASE},\
+	$$(strip $$(subst $$(SrcBase),$$$${SBASE},\
 	cd $$(@D) &&\
 	$$(subst $$(@D)/,,$(CC) -o $$(@F) $(LDFLAGS) $$^)))
 IntermediateTargets	+= $$($(1)_objs)

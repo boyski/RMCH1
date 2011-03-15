@@ -80,7 +80,7 @@ subtree:
 # for details on the former and a modern Linux kernel tree for the latter.
 
 .PHONY: RECIPE_CHANGED
-$(TgtBase)%.$o: _cmd = $(strip $(subst $(SrcBase),$${BASE},$(CC) -c -o $@ -MD -MF $@.$d $(_cflags) $(subst $(TgtBase),$(SrcBase),$(@:.$o=.c))))
+$(TgtBase)%.$o: _cmd = $(strip $(subst $(SrcBase),$${SBASE},$(CC) -c -o $@ -MD -MF $@.$d $(_cflags) $(subst $(TgtBase),$(SrcBase),$(@:.$o=.c))))
 $(TgtBase)%.$o: $(SrcBase)%.c
 $(TgtBase)%.$o: $$(if $$(filter $$(Recipe_$$(subst $$(TgtBase),,$$@)),$$(subst $$(Space),_,$$(_cmd))),,RECIPE_CHANGED)
 	$(_cmd)

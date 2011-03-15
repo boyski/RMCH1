@@ -62,17 +62,18 @@ endif
 # which is used internally to make, and another with the same
 # value which is exported for use in recipes.
 SrcBase := $(dir $(realpath $(lastword ${MAKEFILE_LIST})))
-export BASE := $(SrcBase)
+export SBASE := $(SrcBase)
 
 # Determine the target architecture and its directory.
 Arch := $(shell uname -s)_$(shell uname -p)
 _tbase := $(SrcBase)$(Arch)
 $(shell [ -d $(_tbase) ] || set -x; mkdir -p $(_tbase))
 TgtBase := $(realpath $(_tbase))/
+export TBASE := $(TgtBase)
 
 # Make sure the log file contains a record of the invocation.
 ifeq (,$(filter %clean,$(MAKECMDGOALS)))
-$(info + export BASE=$(BASE))
+$(info + export SBASE=$(SBASE) TBASE=$(subst ${SBASE},$${SBASE},$(TBASE)))
 $(info + "$(strip $(MAKE) $(MFLAGS) -f $(firstword $(MAKEFILE_LIST)) $(MAKECMDGOALS))" in $(CURDIR))
 endif
 
