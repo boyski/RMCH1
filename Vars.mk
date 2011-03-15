@@ -63,7 +63,8 @@ define _ArchiveRule
 $(notdir $(1)): $(LibDir)$(notdir $(1)).$a
 $$($(1)_objs): | $$(sort $$(dir $$($(1)_objs)))
 $(LibDir)$(notdir $(1)).$a: $$($(1)_objs) | $(LibDir)
-	$$(strip $$(subst $$(SrcBase),$$$${BASE},cd $$(<D) &&\
+	$$(strip $$(subst $$(SrcBase),$$$${BASE},\
+	cd $$(<D) &&\
 	$(RM) $$@ &&\
 	$(AR) -cr $$@ $$(^F)))
 IntermediateTargets	+= $$($(1)_objs)
@@ -80,14 +81,10 @@ define _ProgramRule
 .PHONY: $(notdir $(1))
 $(notdir $(1)): $(1)
 $$($(1)_objs): | $$(sort $$(dir $$($(1)_objs)))
-ifeq (,$$($(1)_libs))
-$(1): $$($(1)_objs)
-else
-$(1): $$($(1)_objs) $(addprefix $(LibDir),$$($(1)_libs))
-endif
+$(1): $$($(1)_objs) $$(if $$($(1)_libs),$$(addprefix $(LibDir),$$($(1)_libs)))
 	$$(strip $$(subst $$(SrcBase),$$$${BASE},\
 	cd $$(@D) &&\
-	$(CC) -o $$(@F) $(LDFLAGS) $$^))
+	$$(subst $$(@D)/,,$(CC) -o $$(@F) $(LDFLAGS) $$^)))
 IntermediateTargets	+= $$($(1)_objs)
 FinalTargets		+= $(1)
 PrereqFiles		+= $$(addsuffix .$d,$$($(1)_objs))
