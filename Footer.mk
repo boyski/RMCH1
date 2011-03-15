@@ -39,10 +39,10 @@ $(_tgtdirs):
 	mkdir -p $@
 
 # Conventional "clean" target - removes all known, existing target files.
-_reltgts := $(patsubst $(SrcBase)%,%,$(wildcard $(_targets)))
+_reltgts := $(patsubst $(TgtBase)%,%,$(wildcard $(_targets)))
 .PHONY: clean
 ifneq (,$(_reltgts))
-clean: ; cd $(SrcBase) && $(RM) $(_reltgts)
+clean: ; cd $(TgtBase) && $(RM) $(_reltgts)
 else
 clean: ; @echo "Already clean!"
 endif
@@ -51,10 +51,14 @@ endif
 # (files ending with the extensions listed below) which may not be
 # mentioned as a target.
 _exts := *.$a *.$d *.$o
-_dirs := $(sort $(dir $(realpath ${MAKEFILE_LIST}))) $(SrcBase)lib/
+_dirs := $(sort $(dir $(realpath ${MAKEFILE_LIST}))) $(TgtBase)lib/
 .PHONY: realclean
 realclean:
-	cd $(SrcBase) && $(RM) $(patsubst $(SrcBase)%,%,$(sort $(wildcard $(_targets) $(foreach _dir,$(_dirs),$(addprefix $(_dir),$(_exts))))))
+ifeq ($(SrcBase),$(TgtBase))
+	cd $(TgtBase) && $(RM) $(patsubst $(TgtBase)%,%,$(sort $(wildcard $(_targets) $(foreach _dir,$(_dirs),$(addprefix $(_dir),$(_exts))))))
+else
+	$(RM) -r $(TgtBase)
+endif
 
 .PHONY: help
 help:

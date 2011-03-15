@@ -35,7 +35,7 @@ AllArchives		:=
 AllPrograms		:=
 
 IncDir			:= $(SrcBase)include
-LibDir			:= $(SrcBase)lib/
+LibDir			:= $(TgtBase)lib/
 
 CFLAGS			:= -W
 DFLAGS			:=
