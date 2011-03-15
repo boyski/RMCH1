@@ -42,7 +42,7 @@ $(_tgtdirs):
 _reltgts := $(patsubst $(SrcBase)%,%,$(wildcard $(_targets)))
 .PHONY: clean
 ifneq (,$(_reltgts))
-clean: ; cd $(SrcBase) && rm -f $(_reltgts)
+clean: ; cd $(SrcBase) && $(RM) $(_reltgts)
 else
 clean: ; @echo "Already clean!"
 endif
@@ -54,7 +54,7 @@ _exts := *.$a *.$d *.$o
 _dirs := $(sort $(dir $(realpath ${MAKEFILE_LIST}))) $(SrcBase)lib/
 .PHONY: realclean
 realclean:
-	cd $(SrcBase) && rm -f $(patsubst $(SrcBase)%,%,$(sort $(wildcard $(_targets) $(foreach _dir,$(_dirs),$(addprefix $(_dir),$(_exts))))))
+	cd $(SrcBase) && $(RM) $(patsubst $(SrcBase)%,%,$(sort $(wildcard $(_targets) $(foreach _dir,$(_dirs),$(addprefix $(_dir),$(_exts))))))
 
 .PHONY: help
 help:

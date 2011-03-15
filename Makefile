@@ -66,9 +66,9 @@ export BASE := $(SrcBase)
 
 # Determine the target architecture and its directory.
 Arch := $(shell uname -s)_$(shell uname -p)
-TgtBase := $(SrcBase)$(Arch)
-$(shell [ -d $(TgtBase) ] || set -x; mkdir -p $(TgtBase))
-TgtBase := $(realpath $(SrcBase)$(Arch))/
+_tbase := $(SrcBase)$(Arch)
+$(shell [ -d $(_tbase) ] || set -x; mkdir -p $(_tbase))
+TgtBase := $(realpath $(_tbase))/
 
 # Make sure the log file contains a record of the invocation.
 ifeq (,$(filter %clean,$(MAKECMDGOALS)))
