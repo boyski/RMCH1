@@ -37,18 +37,37 @@ AllPrograms		:=
 IncDir			:= $(SrcBase)include
 LibDir			:= $(TgtBase)lib/
 
+ifdef VSINSTALLDIR
+CC			:= perl $(SrcBase)/Bin/clw.pl
+CFLAGS			:= /nologo /W3
+DFLAGS			:=
+IFLAGS			:= /I$(IncDir)
+_cflags			:= $(CFLAGS) $(DFLAGS) $(IFLAGS)
+LDFLAGS			:= /nologo
+AR			:= ar
+ARFLAGS			:= -cr
+cf			:= /c
+of			:= /Fo
+mdf			= -MD -MF $@.$d
+o			:= obj
+a			:= lib
+d			:= d
+else
+CC			:= gcc
 CFLAGS			:= -W
 DFLAGS			:=
 IFLAGS			:= -I$(IncDir)
 _cflags			:= $(CFLAGS) $(DFLAGS) $(IFLAGS)
-
 LDFLAGS			:=
-
-CC			:= gcc
-
+AR			:= ar
+ARFLAGS			:= -cr
+cf			:= -c
+of			:= -o
+mdf			= -MD -MF $@.$d
+o			:= o
 a			:= a
 d			:= d
-o			:= o
+endif
 
 # Extensible initialization call from sub-makefiles.
 InitDir			= $(eval td := $(subst $(SrcBase),$(TgtBase),$(1)))
@@ -66,7 +85,7 @@ $(LibDir)$(notdir $(1)).$a: $$($(1)_objs) | $(LibDir)
 	$$(strip $$(subst $$(SrcBase),$$$${SBASE},\
 	cd $$(<D) &&\
 	$(RM) $$@ &&\
-	$(AR) -cr $$@ $$(^F)))
+	$(AR) $(ARFLAGS) $$@ $$(^F)))
 IntermediateTargets	+= $$($(1)_objs)
 FinalTargets		+= $(LibDir)$(notdir $(1)).$a
 PrereqFiles		+= $$(addsuffix .$d,$$($(1)_objs))
@@ -84,7 +103,7 @@ $$($(1)_objs): | $$(sort $$(dir $$($(1)_objs)))
 $(1): $$($(1)_objs) $$(if $$($(1)_libs),$$(addprefix $(LibDir),$$($(1)_libs)))
 	$$(strip $$(subst $$(SrcBase),$$$${SBASE},\
 	cd $$(@D) &&\
-	$$(subst $$(@D)/,,$(CC) -o $$(@F) $(LDFLAGS) $$^)))
+	$$(subst $$(@D)/,,$(CC) $(of)$$(@F) $(LDFLAGS) $$^)))
 IntermediateTargets	+= $$($(1)_objs)
 FinalTargets		+= $(1)
 PrereqFiles		+= $$(addsuffix .$d,$$($(1)_objs))

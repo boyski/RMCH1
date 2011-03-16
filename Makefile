@@ -71,7 +71,7 @@ $(shell [ -d $(_tbase) ] || set -x; mkdir -p $(_tbase))
 TgtBase := $(realpath $(_tbase))/
 export TBASE := $(TgtBase)
 
-# Make sure the log file contains a record of the invocation.
+# Make sure any log file will contain a record of the invocation.
 ifeq (,$(filter %clean,$(MAKECMDGOALS)))
 $(info + export SBASE=$(SBASE) TBASE=$(subst ${SBASE},$${SBASE},$(TBASE)))
 $(info + "$(strip $(MAKE) $(MFLAGS) -f $(firstword $(MAKEFILE_LIST)) $(MAKECMDGOALS))" in $(CURDIR))

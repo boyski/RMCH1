@@ -34,6 +34,9 @@ _targets := $(FinalTargets) $(IntermediateTargets) $(PrereqFiles)
 
 # Directories for targets may need to be created on the fly
 # (via order-only dependencies and in a thread-safe way).
+# Directories must be created only in a discrete recipe like
+# this because creating them on demand as part of a bigger recipe
+# causes a race condition in parallel builds.
 _tgtdirs := $(sort $(dir $(_targets)))
 $(_tgtdirs):
 	mkdir -p $@
@@ -80,10 +83,10 @@ subtree:
 # for details on the former and a modern Linux kernel tree for the latter.
 
 .PHONY: RECIPE_CHANGED
-$(TgtBase)%.$o: _cmd = $(strip $(subst $(SrcBase),$${SBASE},$(CC) -c -o $@ -MD -MF $@.$d $(_cflags) $(subst $(TgtBase),$(SrcBase),$(@:.$o=.c))))
+$(TgtBase)%.$o: _cmd = $(strip $(subst $(SrcBase),$${SBASE},$(CC) $(cf) $(of)$@ -MD -MF $@.$d $(_cflags) $(subst $(TgtBase),$(SrcBase),$(@:.$o=.c))))
 $(TgtBase)%.$o: $(SrcBase)%.c
 $(TgtBase)%.$o: $$(if $$(filter $$(Recipe_$$(subst $$(TgtBase),,$$@)),$$(subst $$(Space),_,$$(_cmd))),,RECIPE_CHANGED)
 	$(_cmd)
-	@echo 'Recipe_$(subst $(TgtBase),,$@) := $(subst $(Space),_,$(subst $$,$$$$,$(_cmd)))' >> $@.$d
+	@echo Recipe_$(subst $(TgtBase),,$@) := '$(subst $(Space),_,$(subst $$,$$$$,$(_cmd)))' >> $@.$d
 
 endif #FOOTER_
