@@ -86,7 +86,6 @@ $$($(1)_objs): | $$(sort $$(dir $$($(1)_objs)))
 $(LibDir)$(notdir $(1)).$a: $$($(1)_objs) | $(LibDir)
 	$$(strip $$(subst $$(SrcBase),$$$${SBASE},\
 	cd $$(<D) &&\
-	$(RM) $$@ &&\
 	$(AR) $(ARFLAGS) $$@ $$(^F)))
 IntermediateTargets	+= $$($(1)_objs)
 FinalTargets		+= $(LibDir)$(notdir $(1)).$a
