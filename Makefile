@@ -54,6 +54,7 @@
 ## everything will still work.
 ######################################################################
 
+# This hasn't been tested on anything older than 3.81.
 ifneq (,$(filter 3.7% 3.80%,$(MAKE_VERSION)))
 $(error Error: GNU make 3.81 or above required)
 endif
@@ -62,14 +63,23 @@ endif
 # which is used internally to make, and another with the same
 # value which is exported for use in recipes.
 SrcBase := $(dir $(realpath $(lastword ${MAKEFILE_LIST})))
-export SBASE := $(SrcBase)
 
 # Determine the target architecture and its directory.
+ifdef VSINSTALLDIR
+/	:= $(subst .,\,.)
+Arch := Windows_i386
+SrcBase	:= $(subst /,\,$(SrcBase))
+_tbase := $(subst /,\,$(SrcBase)$(Arch))
+$(shell cmd /c "IF NOT EXIST $(_tbase) md $(_tbase)")
+else
+/	:= /
 Arch := $(shell uname -s)_$(shell uname -p)
 _tbase := $(SrcBase)$(Arch)
-$(shell [ -d $(_tbase) ] || set -x; mkdir -p $(_tbase))
-TgtBase := $(realpath $(_tbase))/
+$(shell [ -d $(_tbase) ] || mkdir -p $(_tbase))
+endif
+TgtBase := $(realpath $(_tbase))$/
 export TBASE := $(TgtBase)
+export SBASE := $(SrcBase)
 
 # Make sure any log file will contain a record of the invocation.
 ifeq (,$(filter %clean,$(MAKECMDGOALS)))
@@ -91,7 +101,7 @@ vpath %.$a $(LibDir)
 
 # Pull in all involved subdirectories.
 include $(SrcBase)SubDirs.mk
-include $(addprefix $(SrcBase),$(addsuffix /Makefile,$(SubDirs)))
+include $(addprefix $(SrcBase),$(addsuffix $/Makefile,$(SubDirs)))
 
 # Late infrastructure.
 include $(SrcBase)Footer.mk

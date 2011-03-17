@@ -35,7 +35,7 @@ AllArchives		:=
 AllPrograms		:=
 
 IncDir			:= $(SrcBase)include
-LibDir			:= $(TgtBase)lib/
+LibDir			:= $(TgtBase)lib$/
 
 ifdef VSINSTALLDIR
 CC			:= perl $(SrcBase)/Bin/clw.pl

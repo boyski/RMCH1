@@ -54,7 +54,7 @@ endif
 # (files ending with the extensions listed below) which may not be
 # mentioned as a target.
 _exts := *.$a *.$d *.$o
-_dirs := $(sort $(dir $(realpath ${MAKEFILE_LIST}))) $(TgtBase)lib/
+_dirs := $(sort $(dir $(realpath ${MAKEFILE_LIST}))) $(TgtBase)lib$/
 .PHONY: realclean
 realclean:
 ifeq ($(SrcBase),$(TgtBase))
@@ -71,7 +71,7 @@ help:
 # to be considered for build purposes.
 .PHONY: subtree
 subtree:
-	$(MAKE) --no-print-directory -f $(firstword $(MAKEFILE_LIST)) TgtFilter=$(CURDIR)/
+	$(MAKE) --no-print-directory -f $(firstword $(MAKEFILE_LIST)) TgtFilter=$(CURDIR)$/
 
 .SECONDEXPANSION:
 
