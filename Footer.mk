@@ -87,6 +87,9 @@ $(TgtBase)%.$o: _cmd = $(strip $(subst $(SrcBase),$${SBASE},$(CC) $(cf) $(of)$@ 
 $(TgtBase)%.$o: $(SrcBase)%.c
 $(TgtBase)%.$o: $$(if $$(filter $$(Recipe_$$(subst $$(TgtBase),,$$@)),$$(subst $$(Space),_,$$(_cmd))),,RECIPE_CHANGED)
 	$(_cmd)
-	@echo Recipe_$(subst $(TgtBase),,$@) := '$(subst $(Space),_,$(subst $$,$$$$,$(_cmd)))' >> $@.$d
+	@$(MV) $@.$d $@.$d.$d &&\
+	sed "s@$(SrcBase)@$$\{SBASE\}@g" $@.$d.$d > $@.$d &&\
+	$(RM) $@.$d.$d &&\
+	echo Recipe_$(subst $(TgtBase),,$@) := '$(subst $(Space),_,$(subst $$,$$$$,$(_cmd)))' >> $@.$d
 
 endif #FOOTER_

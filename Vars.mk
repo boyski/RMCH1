@@ -52,6 +52,7 @@ mdf			= -MD -MF $@.$d
 o			:= obj
 a			:= lib
 d			:= d
+MV			:= move /Y
 else
 CC			:= gcc
 CFLAGS			:= -W
@@ -67,6 +68,7 @@ mdf			= -MD -MF $@.$d
 o			:= o
 a			:= a
 d			:= d
+MV			:= mv -f
 endif
 
 # Extensible initialization call from sub-makefiles.
