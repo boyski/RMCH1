@@ -37,17 +37,19 @@ AllPrograms		:=
 IncDir			:= $(SrcBase)include
 LibDir			:= $(TgtBase)lib$/
 
+PERL			:= perl
+
 ifdef VSINSTALLDIR
-CC			:= perl $(SrcBase)/Bin/clw.pl
-CFLAGS			:= /nologo /W3
+CC			:= $(PERL) -w $(SrcBase)/Bin/clw.pl
+CFLAGS			:= -W3
 DFLAGS			:=
-IFLAGS			:= /I$(IncDir)
+IFLAGS			:= -I$(IncDir)
 _cflags			:= $(CFLAGS) $(DFLAGS) $(IFLAGS)
 LDFLAGS			:= /nologo
 AR			:= ar
 ARFLAGS			:= -cr
-cf			:= /c
-of			:= /Fo
+cf			:= -c
+of			:= -Fo
 mdf			= -MD -MF $@.$d
 o			:= obj
 a			:= lib

@@ -67,10 +67,11 @@ SrcBase := $(dir $(realpath $(lastword ${MAKEFILE_LIST})))
 # Determine the target architecture and its directory.
 ifdef VSINSTALLDIR
 /	:= $(subst .,\,.)
+/	:= /
+SrcBase := $(patsubst /h/%,h:/%,$(SrcBase))
 Arch := Windows_i386
-SrcBase	:= $(subst /,\,$(SrcBase))
-_tbase := $(subst /,\,$(SrcBase)$(Arch))
-$(shell cmd /c "IF NOT EXIST $(_tbase) md $(_tbase)")
+_tbase := $(SrcBase)$(Arch)
+$(shell test -d $(_tbase) || mkdir $(_tbase))
 else
 /	:= /
 Arch := $(shell uname -s)_$(shell uname -p)

@@ -1,18 +1,24 @@
 #!/usr/bin/env perl
 
 use File::Basename;
-use Getopt::Long qw(:config no_ignore_case);
+use Getopt::Long qw(:config no_ignore_case pass_through);
 
 my($prog) = fileparse($0, '\.\w*$');
 
 my %opt;
 GetOptions(\%opt, qw(MD MMD MF=s));
 
-splice(@ARGV, 1, 0, '/showIncludes') if $opt{MD} || $opt{MMD};
-warn "+ @ARGV\n";
-
-my @output = qx(@ARGV);
-exit(2) if $?;
+my @cmd = qw(cl /nologo);
+push(@cmd, '/showIncludes') if $opt{MD} || $opt{MMD};
+for (@ARGV) {
+    push(@cmd, $_);
+}
+warn "+ @cmd\n";
+my @output = qx(@cmd);
+if ($?) {
+    print STDERR @output;
+    exit(2);
+}
 
 my $rc = 0;
 
