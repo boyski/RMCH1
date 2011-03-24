@@ -74,7 +74,7 @@ _tbase := $(SrcBase)$(Arch)
 $(shell test -d $(_tbase) || mkdir $(_tbase))
 else
 /	:= /
-Arch := $(shell uname -s)_$(shell uname -p)
+Arch := $(shell uname -s)_$(shell uname -m)
 _tbase := $(SrcBase)$(Arch)
 $(shell [ -d $(_tbase) ] || mkdir -p $(_tbase))
 endif
