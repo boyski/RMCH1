@@ -67,6 +67,10 @@ endif
 help:
 	@cat $(SrcBase)README
 
+# Debugging help: run "make print-FOO" to see the value of $(FOO).
+print-%:
+	@echo "$* = '$($*)' [from $(origin $*)]"
+
 # Causes only targets defined within the current subtree (and their prerequisites)
 # to be considered for build purposes.
 .PHONY: subtree
