@@ -95,7 +95,7 @@ show-help = $(if $(filter help,$(MAKECMDGOALS)),$(info $1 -- $2))
 
 # Reserve 'all' early on as the default target.
 .PHONY: all
-all: $(call show-help,all,Build all known target files)
+all: $(call show-help,all,DEFAULT: Build all known target files)
 
 # All rules used here should be explicit.
 .SUFFIXES:
