@@ -59,10 +59,12 @@ ifneq (,$(filter 3.7% 3.80%,$(MAKE_VERSION)))
 $(error Error: GNU make 3.81 or above required)
 endif
 
+MakeFile := $(firstword $(MAKEFILE_LIST))
+
 # Determine the root of the source tree. There's one variable
 # which is used internally to make, and another with the same
 # value which is exported for use in recipes.
-SrcBase := $(dir $(realpath $(lastword ${MAKEFILE_LIST})))
+SrcBase := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 
 # Determine the target architecture and its directory.
 ifdef VSINSTALLDIR
@@ -83,14 +85,17 @@ export TBASE := $(TgtBase)
 export SBASE := $(SrcBase)
 
 # Make sure any log file will contain a record of the invocation.
-ifeq (,$(filter %clean,$(MAKECMDGOALS)))
+ifeq (,$(filter %clean help% print-%,$(MAKECMDGOALS)))
 $(info + export SBASE=$(SBASE) TBASE=$(subst ${SBASE},$${SBASE},$(TBASE)))
-$(info + "$(strip $(MAKE) $(MFLAGS) -f $(firstword $(MAKEFILE_LIST)) $(MAKECMDGOALS))" in $(CURDIR))
+$(info + "$(strip $(MAKE) $(MFLAGS) -f $(MakeFile) $(MAKECMDGOALS))" in $(CURDIR))
 endif
+
+# Need this early - support for help target.
+show-help = $(if $(filter help,$(MAKECMDGOALS)),$(info $1 -- $2))
 
 # Reserve 'all' early on as the default target.
 .PHONY: all
-all:
+all: $(call show-help,all,Build all known target files)
 
 # All rules used here should be explicit.
 .SUFFIXES:

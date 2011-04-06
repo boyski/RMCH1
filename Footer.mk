@@ -44,11 +44,8 @@ $(_tgtdirs):
 # Conventional "clean" target - removes all known, existing target files.
 _reltgts := $(patsubst $(TgtBase)%,%,$(wildcard $(_targets)))
 .PHONY: clean
-ifneq (,$(_reltgts))
-clean: ; cd $(TgtBase) && $(RM) $(_reltgts)
-else
-clean: ; @echo "Already clean!"
-endif
+clean: $(call show-help,clean,Remove all known target files)
+	$(if $(_reltgts),cd $(TgtBase) && $(RM) $(_reltgts),@echo "Already clean!")
 
 # Cleans not only official targets but also any typical target types
 # (files ending with the extensions listed below) which may not be
@@ -56,7 +53,7 @@ endif
 _exts := *.$a *.$d *.$o
 _dirs := $(sort $(dir $(realpath ${MAKEFILE_LIST}))) $(TgtBase)lib$/
 .PHONY: realclean
-realclean:
+realclean: $(call show-help,realclean,Remove anything that looks like a target file)
 ifeq ($(SrcBase),$(TgtBase))
 	cd $(TgtBase) && $(RM) $(patsubst $(TgtBase)%,%,$(sort $(wildcard $(_targets) $(foreach _dir,$(_dirs),$(addprefix $(_dir),$(_exts))))))
 else
@@ -65,9 +62,16 @@ endif
 
 .PHONY: help
 help:
-	@cat $(SrcBase)README
+	$(if $(filter help,$(MAKECMDGOALS)),,@echo "Use '$(MAKE) help' to get help")
+	@echo See $(SrcBase)README for background
 
-# Debugging help: run "make print-FOO" to see the value of $(FOO).
+# Debugging support: run "make print-FOO" to see the value of $(FOO)
+# or "make print-all" to see the full list.
+.PHONY: print-all
+print-all:
+	@$(foreach V,$(sort $(.VARIABLES)),\
+	    $(if $(filter-out environment% automatic,\
+	    $(origin $V)),$(info $V=$($V) ($(value $V)))))
 print-%:
 	@echo "$* = '$($*)' [from $(origin $*)]"
 
