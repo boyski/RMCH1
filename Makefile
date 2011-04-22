@@ -91,11 +91,11 @@ $(info + "$(strip $(MAKE) $(MFLAGS) -f $(MakeFile) $(MAKECMDGOALS))" in $(CURDIR
 endif
 
 # Need this early - support for help target.
-show-help = $(if $(filter help,$(MAKECMDGOALS)),$(info $1 -- $2))
+desc-tgt = $(if $(filter help,$(MAKECMDGOALS)),$(info $1 -- $2))
 
 # Reserve 'all' early on as the default target.
 .PHONY: all
-all: $(call show-help,all,DEFAULT: Build all known target files)
+all: $(call desc-tgt,all,DEFAULT: Build all known target files)
 
 # All rules used here should be explicit.
 .SUFFIXES:

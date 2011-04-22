@@ -44,7 +44,7 @@ $(_tgtdirs):
 # Conventional "clean" target - removes all known, existing target files.
 _reltgts := $(patsubst $(TgtBase)%,%,$(wildcard $(_targets)))
 .PHONY: clean
-clean: $(call show-help,clean,Remove all known target files)
+clean: $(call desc-tgt,clean,Remove all known target files)
 	$(if $(_reltgts),cd $(TgtBase) && $(RM) $(_reltgts),@echo "Already clean!")
 
 # Cleans not only official targets but also any typical target types
@@ -53,7 +53,7 @@ clean: $(call show-help,clean,Remove all known target files)
 _exts := *.$a *.$d *.$o
 _dirs := $(sort $(dir $(realpath ${MAKEFILE_LIST}))) $(TgtBase)lib$/
 .PHONY: realclean
-realclean: $(call show-help,realclean,Remove anything that looks like a target file)
+realclean: $(call desc-tgt,realclean,Remove anything that looks like a target file)
 ifeq ($(SrcBase),$(TgtBase))
 	cd $(TgtBase) && $(RM) $(patsubst $(TgtBase)%,%,$(sort $(wildcard $(_targets) $(foreach _dir,$(_dirs),$(addprefix $(_dir),$(_exts))))))
 else
