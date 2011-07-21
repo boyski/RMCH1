@@ -54,7 +54,7 @@ o			:= obj
 a			:= lib
 d			:= d
 MV			:= move /Y
-else
+else	#VSINSTALLDIR
 CC			:= gcc
 CFLAGS			:= -W
 DFLAGS			:=
@@ -69,7 +69,18 @@ o			:= o
 a			:= a
 d			:= d
 MV			:= mv -f
-endif
+
+# Verbosity hack - assumes Bourne-compatible shell. Turns off regular
+# make verbosity, turns on shell verbosity with -x flag. Note that
+# this type of verbosity goes to stderr.
+ifdef VERBOSE
+.SILENT:
+#SHELL			:= /bin/bash
+SHELL_ORIG		:= $(SHELL)
+SHELL			 = $(warning [$@])$(SHELL_ORIG) -x
+endif	#VERBOSE
+
+endif	#VSINSTALLDIR
 
 # Extensible initialization call from sub-makefiles.
 InitDir			= $(eval td := $(subst $(SrcBase),$(TgtBase),$(1)))
