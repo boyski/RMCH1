@@ -73,14 +73,16 @@ MV			:= mv -f
 # Verbosity hack - assumes Bourne-compatible shell. Turns off regular
 # make verbosity, turns on shell verbosity with -x flag. Note that
 # this type of verbosity goes to stderr.
-ifdef VERBOSE
+ifdef V
+ifneq (0,$V)
 .SILENT:
 #SHELL			:= /bin/bash
 SHELL_ORIG		:= $(SHELL)
 SHELL			 = $(warning [$@])$(SHELL_ORIG) -x
-endif	#VERBOSE
+endif	## V != 0
+endif	## V
 
-endif	#VSINSTALLDIR
+endif	## VSINSTALLDIR
 
 # Extensible initialization call from sub-makefiles.
 InitDir			= $(eval td := $(subst $(SrcBase),$(TgtBase),$(1)))
@@ -121,4 +123,4 @@ FinalTargets		+= $(1)
 PrereqFiles		+= $$(addsuffix .$d,$$($(1)_objs))
 endef
 
-endif #VARS_
+endif ## VARS_
