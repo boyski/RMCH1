@@ -1,13 +1,14 @@
 # Copyright (c) 2002-2011 David Boyce.  All rights reserved.
 mfd := $(dir $(realpath $(lastword ${MAKEFILE_LIST})))
 ifndef SrcBase
-include $(mfd)../Makefile
+include $(mfd)../GNUmakefile
 else
 $(call InitDir,$(mfd))
 ###################### IGNORE ABOVE ###############################
 
-AllArchives		+= $(td)libC
-$(td)libC_objs		:= $(td)c1.$o $(td)c2.$o $(td)c3.$o
+AllPrograms		+= $(td)cmd1
+$(td)cmd1_objs		:= $(td)main.$o
+$(td)cmd1_libs		:= libA.$a libB.$a libC.$a
 
 ###################### IGNORE BELOW ###############################
 endif

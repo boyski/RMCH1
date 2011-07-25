@@ -17,13 +17,16 @@
 ##	CHANGES
 ##
 ## If a directory is moved, it's necessary to change the path by
-## which its Makefile included below. That should be the only
+## which its GNUmakefile included below. That should be the only
 ## non-local change required. Similarly, if a new directory is
-## created its Makefile must be added to the list below.
+## created its GNUmakefile must be added to the list below.
 ######################################################################
 
 ######################################################################
 ##	CODING CONVENTIONS
+##
+## Since this relies heavily on GNU Make features, we use the name
+## "GNUmakefile" for all makefiles.
 ##
 ## Make offers two equivalent ways of expanding variables: $() and ${}.
 ## We try to use ${} for variables derived from the environment and
@@ -107,7 +110,7 @@ vpath %.$a $(LibDir)
 
 # Pull in all involved subdirectories.
 include $(SrcBase)SubDirs.mk
-include $(addprefix $(SrcBase),$(addsuffix $/Makefile,$(SubDirs)))
+include $(addprefix $(SrcBase),$(addsuffix $/GNUmakefile,$(SubDirs)))
 
 # Late infrastructure.
 include $(SrcBase)Footer.mk
