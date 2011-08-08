@@ -81,7 +81,7 @@ else
 /	:= /
 Arch := $(shell uname -s)_$(shell uname -m)
 _tbase := $(SrcBase)$(Arch)
-$(shell [ -d $(_tbase) ] || mkdir -p $(_tbase))
+$(shell test -d $(_tbase) || mkdir -p $(_tbase))
 endif
 TgtBase := $(realpath $(_tbase))$/
 export TBASE := $(TgtBase)
